@@ -2,14 +2,13 @@
  *  The GRA Project
  *  Gesture Recognition for Automobiles
  */
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
-//#include <opencv/cvaux.h>
-//#include <opencv/cxcore.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+/* \todo [GMN] Get input from a video file */
 
 int main(int argc, char **argv)
 {
@@ -18,10 +17,6 @@ int main(int argc, char **argv)
 	IplImage *lImgOriginal;
 	IplImage *lImgProcessed;
 	char lCheckForEscKey;
-//	CvMemStorage *p_strStorage;
-//	CvSeq *p_seqCircles;
-//	float *p_fltXYRadius;
-//	int i;
 
 	/* Welcome message */
 	printf("The GRA project\r\n");
@@ -40,36 +35,40 @@ int main(int argc, char **argv)
 	while(1) {
 		lImgOriginal = cvQueryFrame(lCapWebCam);
 
+
 		if (lImgOriginal == NULL) {
 			printf("Error: frame is NULL\n");
 			break;
 		}
 
-//		cvInRangeS(p_imgOriginal, CV_RGB(70, 70, 170), 		/* min filtering */
-//								  CV_RGB(90, 90, 250),		/* max filtering */
-//								  p_imgProcessed);
-//
-//		p_strStorage = cvCreateMemStorage(0);
-//
-//		cvSmooth(p_imgProcessed, p_imgProcessed, CV_GAUSSIAN, 9, 9, 0, 0);
-//
-//		p_seqCircles = cvHoughCircles(p_imgProcessed, p_strStorage, CV_HOUGH_GRADIENT,
-//									  2, (p_imgProcessed->height /4), 100, 50, 10, 400);
-//
-//		for (i=0; i < p_seqCircles->total; i++) {
-//			p_fltXYRadius = (float*)cvGetSeqElem(p_seqCircles, i);
-//			printf("ball position x = %f, y = %f, r = %f\n", p_fltXYRadius[0], p_fltXYRadius[1], p_fltXYRadius[2]);
-//
-//			cvCircle(p_imgOriginal, cvPoint(cvRound(p_fltXYRadius[0]), cvRound(p_fltXYRadius[1])),
-//					 3, CV_RGB(0,255,0), CV_FILLED);
-//
-//			cvCircle(p_imgOriginal, cvPoint(cvRound(p_fltXYRadius[0]), cvRound(p_fltXYRadius[1])),
-//					 cvRound(p_fltXYRadius[2]), CV_RGB(255,0,0), 3);
-//		}
+#if 0
+		{
+			printf("Channel: %d, %d\r\n", lImgOriginal->alphaChannel, lImgProcessed->alphaChannel);
+			printf("Width: %d, %d\r\n", lImgOriginal->width, lImgProcessed->width);
+			printf("Depth: %d, %d\r\n", lImgOriginal->depth, lImgProcessed->depth);
+		}
+#endif
+
+		/* Applying OTSU threshold */
+#if 1
+		{
+			/* It is necessary to convert to gray scale before apply the filter */
+			cvCvtColor(lImgOriginal, lImgProcessed, CV_BGR2GRAY);
+
+			double lTh = cvThreshold(lImgProcessed,  	     				/* src */
+					                 lImgProcessed, 						/* dst */
+					                 127,           						/* thresh */
+					                 255,                         			/* maxval */
+					                 CV_THRESH_BINARY | CV_THRESH_OTSU   	/* type */
+					                 );
+
+			printf("Otsu: %lf\r\n", lTh);
+
+		}
+#endif
 
 		cvShowImage("Original", lImgOriginal);
 		cvShowImage("Processed", lImgProcessed);
-//		cvReleaseMemStorage(&p_strStorage);
 
 		lCheckForEscKey = cvWaitKey(10);
 		if (lCheckForEscKey == 27) {
