@@ -1,6 +1,6 @@
 /**
  *  The GRA Project
- *  Gesture Recognition for Automobiles
+ *  Gesture Recognition for Automobiles.
  */
 #include <ctype.h>
 #include <stdio.h>
