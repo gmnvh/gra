@@ -1,0 +1,27 @@
+\noindent\resizebox{\textwidth} {!} {
+\begin{ganttchart}[
+				       vgrid,								% Add vertical lines in the bar canvas
+				       bar/.append style={fill=blue!50},	% By default, fill bars with blue color
+				       progress=today,						% Add progress information
+				       today=4,								% Today configuration (month # * 2)
+				  ] {1}{24}
+\gantttitle{2014}{24} 						\\
+\gantttitlelist{1,...,12}{2} 				\\
+
+% Tasks
+\ganttbar{Referência bibliográfica}{1}{14} 	\\
+\ganttbar{Elaboração da câmera IR} {1}{4} 	\\
+\ganttbar{Elaboração da base de dados com a câmera IR}{4}{6} 	\\
+\ganttbar{Extração de características das imagens}{1}{6} 		\\
+\ganttbar{Preparação para qualificação}{6}{14} 					\ganttnewline
+
+\ganttmilestone[
+progress=none
+]
+{Qualificação}{14} 								\ganttnewline
+
+\ganttbar{Codificação do algoritmo}{14}{20} 	\\
+\ganttbar{Algoritmo I.A.}{20}{24} 			
+
+\end{ganttchart}
+}
