@@ -1,22 +1,33 @@
-\documentclass[a4paper,12pt]{book}
+\documentclass[a4paper,11pt,oneside]{book}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage[brazilian]{babel}
+\usepackage[hmargin=2cm,vmargin=3.5cm,bmargin=2cm]{geometry}
+
+\setcounter{secnumdepth}{3}		% Add level 3 of sections (can use \subsubsection in books)
 
 \begin{document}
 
-\author{TeXstudio Team}
-\title{Reconhecimento de gestões e poses em um ambiente automotivo}
+\author{Gustavo Müller Nunes}
+\title{Reconhecimento de imagens de gestos e poses de mão em um ambiente automotivo}
 \date{January 2014}
 
-\frontmatter
 \maketitle
-\tableofcontents
+\tableofcontents 	%Índice de conteúdos
+\listoftables 		%Lista de tabelas
+\listoffigures 		%Lista de figuras
 
-\mainmatter
-\include{./chapter1}
-\include{./TeX_files/chapter02}
+\input{chapter.objetivo.tex}
 
-\backmatter
-% bibliography, glossary and index would go here.
+\chapter{Teoria}
+\input{section.momento.tex}
+
+
+\begin{thebibliography}{2}
+ 
+\bibitem{ref1} Alberto Simões ,{\em Uma não tão pequena introdução ao \LaTeX},2007.
+\bibitem{ref2} Autor do livro ,{\em Título do Livro}, Ano de edição,Editora,etc.
+ 
+\end{thebibliography}
 
 \end{document}
