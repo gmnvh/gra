@@ -1,10 +1,16 @@
 \documentclass[a4paper,11pt,oneside]{book}
-\usepackage[utf8]{inputenc}
+
+\usepackage{color}
 \usepackage{graphicx}
+\usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
 \usepackage[hmargin=2cm,vmargin=3.5cm,bmargin=2cm]{geometry}
 
+% Global configuration
 \setcounter{secnumdepth}{3}		% Add level 3 of sections (can use \subsubsection in books)
+
+% New commands
+\newcommand{\todo}[1]{} %{\null \fbox{NOTA: \textcolor{red}{#1}} \\ \null}
 
 \begin{document}
 
@@ -13,21 +19,23 @@
 \date{January 2014}
 
 \maketitle
-\tableofcontents 	%Índice de conteúdos
-\listoftables 		%Lista de tabelas
-\listoffigures 		%Lista de figuras
+\tableofcontents 	% Índice de conteúdos
+\listoftables 		% Lista de tabelas
+\listoffigures 		% Lista de figuras
 
 \input{chapter.objetivo.tex}
-
 \chapter{Teoria}
 \input{section.momento.tex}
 
 
 \begin{thebibliography}{2}
  
-\bibitem{ref1} Alberto Simões ,{\em Uma não tão pequena introdução ao \LaTeX},2007.
-\bibitem{ref2} Autor do livro ,{\em Título do Livro}, Ano de edição,Editora,etc.
+\bibitem{ref1} Zobl, M., Nieschulz, R., Geiger, M., Lang M., Rigoll, G.,{Gesture Components for Natural Interaction with In-Car devices},2003.
+\bibitem{ref2} Akyol, S., Canzler, U., Bengler, K., Hahn, W.: Gesture control for use in auto-mobiles. In: Proceedings, MV A 2000 Workshop on Machine Vision Applications, Tokyo, Japan, November 28-30, 2000, IAPR, ISBN 4-901122-00-2 (2000)
  
+\bibitem{kinect} http://www.microsoft.com/en-us/kinectforwindows/develop/
+\bibitem{intel}http://software.intel.com/en-us/vcsource/tools/perceptual-computing-sdk
+
 \end{thebibliography}
 
 \end{document}
