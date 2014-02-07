@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 
 #define THIS_MODULE "MAIN"
 #define THIS_LEVEL gOption.trace
@@ -287,23 +287,23 @@ int main(int argc, char **argv)
 	TRACE_DEBUG("The GRA Project");
 	TRACE_DEBUG("Input type: %d, %s", gOption.input, gOption.inputFile);
 
-	/* Create windows */
-	cvNamedWindow("Original", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow("Processed", CV_WINDOW_AUTOSIZE);
-
-	switch(gOption.input) {
-	case INPUT_WEBCAM:
-		webcam();
-		break;
-	case INPUT_PHOTO:
-		image();
-		break;
-	case INPUT_VIDEO:
-		video();
-		break;
-	}
-
-	cvDestroyWindow("Original");
-	cvDestroyWindow("Processed");
+//	/* Create windows */
+//	cvNamedWindow("Original", CV_WINDOW_AUTOSIZE);
+//	cvNamedWindow("Processed", CV_WINDOW_AUTOSIZE);
+//
+//	switch(gOption.input) {
+//	case INPUT_WEBCAM:
+//		webcam();
+//		break;
+//	case INPUT_PHOTO:
+//		image();
+//		break;
+//	case INPUT_VIDEO:
+//		video();
+//		break;
+//	}
+//
+//	cvDestroyWindow("Original");
+//	cvDestroyWindow("Processed");
 	return 0;
 }
