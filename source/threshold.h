@@ -10,4 +10,9 @@ public:
 	double apply(cv::InputArray src, cv::OutputArray dst, double thresh);
 };
 
+class adaptThreshold : globalThreshold {
+public:
+	double apply(cv::InputArray src, cv::OutputArray dst);
+};
+
 #endif

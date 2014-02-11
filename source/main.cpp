@@ -11,6 +11,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv/cv.h"
 #include "opencv/highgui.h"
+#include "opencv2/ml/ml.hpp"
 
 #include "threshold.h"
 
@@ -21,6 +22,9 @@
 #include "main.h"
 
 using namespace cv;
+
+//CvSVM SVM;
+CvSVM mySVM;
 
 /**
  * Global variables
@@ -84,6 +88,12 @@ int options(int argc, char **argv)
 	return lRsp;
 }
 
+void proc01(Mat &image) {
+
+	/* It is necessary to convert to gray scale before apply the filter */
+	cvtColor(image, image, CV_BGR2GRAY);
+}
+
 void image(void)
 {
 	Mat lImgOriginal = imread(gOption.inputFile, CV_LOAD_IMAGE_COLOR);
@@ -95,9 +105,30 @@ void image(void)
 		return;
 	}
 
-//	lImgProcessed = cvCreateImage(cvSize(lImgOriginal->width, lImgOriginal->height), IPL_DEPTH_8U, 1);
-//	lImgTemp = cvCreateImage(cvSize(lImgOriginal->width, lImgOriginal->height), IPL_DEPTH_8U, 1);
+#if 0
+	/* Threshold test */
+	{
+		Mat lImgOtsu, lImgAdaptive;
+		globalThreshold *thresh = new globalThreshold();
+		adaptThreshold *adaptThresh = new adaptThreshold();
 
+		namedWindow("Otsu", CV_WINDOW_AUTOSIZE);
+		namedWindow("Adaptive", CV_WINDOW_AUTOSIZE);
+
+		cvtColor(lImgOriginal, lImgOtsu, CV_BGR2GRAY);
+		cvtColor(lImgOriginal, lImgAdaptive, CV_BGR2GRAY);
+
+		double lTh = thresh->apply(lImgOtsu, lImgOtsu);
+		TRACE_INFO("Otsu threshold: %lf", lTh);
+
+		adaptThresh->apply(lImgAdaptive, lImgAdaptive);
+
+		imshow("Original", lImgOriginal);
+		imshow("Otsu", lImgOtsu);
+		imshow("Adaptive", lImgAdaptive);
+	}
+#endif
+#if 1
 	{
 		RNG rng(12345);
 
@@ -109,92 +140,79 @@ void image(void)
 		TRACE_INFO("Otsu: %lf", lTh);
 
 		vector<vector<Point> > contours;
-		  vector<Vec4i> hierarchy;
+		vector<Vec4i> hierarchy;
 
-		  /// Find contours
-		  findContours( lImgProcessed, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+		/// Find contours
+		findContours( lImgProcessed, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
-		  /// Get the moments
-		  vector<Moments> mu(contours.size() );
-		  for( int i = 0; i < contours.size(); i++ )
-		     { mu[i] = moments( contours[i], false ); }
+		/// Get the moments
+		vector<Moments> mu(contours.size());
+		double muhu[contours.size()][7];
 
-		  ///  Get the mass centers:
-		  vector<Point2f> mc( contours.size() );
-		  for( int i = 0; i < contours.size(); i++ )
-		     { mc[i] = Point2f( mu[i].m10/mu[i].m00 , mu[i].m01/mu[i].m00 ); }
+		for( unsigned i = 0; i < contours.size(); i++ ) {
+			mu[i] = moments( contours[i], false );
+			HuMoments(mu[i], muhu[i]);
+			//muhu[0][0] = 0.1;
+		}
 
-		  vector<double> mdelta(contours.size());
-		  for (unsigned i=0; i < contours.size(); i++) {
-			  double a = (mu[i].m20 / mu[i].m00) - (mc[i].x * mc[i].x);
-			  double b = 2 * ((mu[i].m11 / mu[i].m00) - (mc[i].x * mc[i].y));
-			  double c = (mu[i].m02 / mu[i].m00) - (mc[i].y * mc[i].y);
+		///  Get the mass centers:
+		vector<Point2f> mc( contours.size() );
+		for( int i = 0; i < contours.size(); i++ )
+		{ mc[i] = Point2f( mu[i].m10/mu[i].m00 , mu[i].m01/mu[i].m00 ); }
 
-			  mdelta[i] = atan2(b,(a-c))/2;
-			  TRACE_INFO("Delta: %lf", mdelta[i]);
+		vector<double> mdelta(contours.size());
+		for (unsigned i=0; i < contours.size(); i++) {
+			double a = (mu[i].m20 / mu[i].m00) - (mc[i].x * mc[i].x);
+			double b = 2 * ((mu[i].m11 / mu[i].m00) - (mc[i].x * mc[i].y));
+			double c = (mu[i].m02 / mu[i].m00) - (mc[i].y * mc[i].y);
 
-		  }
+			mdelta[i] = atan2(b,(a-c))/2;
+			TRACE_INFO("Delta: %lf", mdelta[i]);
 
-		  /// Draw contours
-		  Mat drawing = Mat::zeros( lImgProcessed.size(), CV_8UC3 );
-		  for( int i = 0; i< contours.size(); i++ )
-		     {
-		       Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-		       drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
-		       circle( drawing, mc[i], 4, color, -1, 8, 0 );
-		     }
+		}
+
+		/// Draw contours
+		Mat drawing = Mat::zeros( lImgProcessed.size(), CV_8UC3 );
+		for( int i = 0; i< contours.size(); i++ )
+		{
+			Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+			drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
+			circle( drawing, mc[i], 4, color, -1, 8, 0 );
+		}
 
 
-		  printf("\t Info: Area and Contour Length \n");
-		  for( int i = 0; i< contours.size(); i++ )
-		     {
-		       printf(" * Contour[%d] - Area (M_00) = %.2f - Area OpenCV: %.2f - Length: %.2f \n", i, mu[i].m00, contourArea(contours[i]), arcLength( contours[i], true ) );
-		       Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-		       drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
-		       circle( drawing, mc[i], 4, color, -1, 8, 0 );
+		printf("\t Info: Area and Contour Length \n");
+		for( int i = 0; i< contours.size(); i++ )
+		{
+			printf(" * Contour[%d] - Area (M_00) = %.2f - Area OpenCV: %.2f - Length: %.2f \n", i, mu[i].m00, contourArea(contours[i]), arcLength( contours[i], true ) );
+			printf("Hu: {%f, %f, %f, %f, %f, %f, %f}\n", muhu[i][0],muhu[i][1],muhu[i][2],muhu[i][3],muhu[i][4],muhu[i][5],muhu[i][6]);
+			Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+			drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
+			circle( drawing, mc[i], 4, color, -1, 8, 0 );
 
-		       Point massc = Point((int)mc[i].x, (int)mc[i].y);
+			Point massc = Point((int)mc[i].x, (int)mc[i].y);
 
-		       if (mu[i].m00 > 100) {
-		    	   line(drawing,
-		    			   massc,
-		    			   Point(massc.x + (100 * cos(mdelta[i])), massc.y + (100 * sin(mdelta[i]))),
-		    			   color, 2, CV_AA, 0);
-		    	   TRACE_DEBUG("AHA");
-		       }
-		     }
-		  imshow("Processed", drawing);
+			if (mu[i].m00 > 1000) {
+				line(drawing,
+						massc,
+						Point(massc.x + (100 * cos(mdelta[i])), massc.y + (100 * sin(mdelta[i]))),
+						color, 2, CV_AA, 0);
 
-//		double lTh = cvThreshold(lImgProcessed,  	     				/* src */
-//								 lImgProcessed, 						/* dst */
-//								 127,           						/* thresh */
-//								 255,                         			/* maxval */
-//								 CV_THRESH_BINARY | CV_THRESH_OTSU   	/* type */
-//								 );
-//
-//		TRACE_INFO("Otsu: %lf", lTh);
-//
-//		cvMorphologyEx(lImgProcessed, lImgProcessed, lImgTemp, NULL, CV_MOP_OPEN, 10);
-//		cvShowImage("Processed", lImgProcessed);
-//
-//
-//		{
-//			int i;
-//			CvMemStorage *storage = cvCreateMemStorage(0);
-//			CvSeq *contours = 0;//cvCreateSeq(0, sizeof(CvSeq), sizeof(CvPoint), storage);
-//			cvFindContours(lImgProcessed, storage, &contours, sizeof(CvContour), CV_RETR_EXTERNAL,
-//					CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
-//			TRACE_INFO("contours->total = %d\n", contours->total);
-//
-//			for (; contours != 0; contours = contours->h_next)
-//			{
-//			    cvDrawContours(lImgOriginal, contours, CV_RGB(255, 0, 0), CV_RGB(255,0,255), 1, 0, 8, cvPoint(0,0));
-//			    //TRACE_INFO("Contour");
-//			}
-//		}
-//
+				Mat sampleMat = (Mat_<float>(1,7) << muhu[i][0], muhu[i][1], muhu[i][2], muhu[i][3], muhu[i][4], muhu[i][5], muhu[i][6]);
+				float rsp = mySVM.predict(sampleMat);
+				if (rsp == 1) {
+					printf("Dedo\n");
+				} else if (rsp == -1) {
+					printf("Open Hand\n");
+				} else {
+					printf("Nada\n");
+				}
+			}
+		}
+		imshow("Processed", drawing);
+
 	}
-
+#endif
 	imshow("Original", lImgOriginal);
 	//imshow("Processed", lImgProcessed);
 
@@ -360,6 +378,24 @@ int main(int argc, char **argv)
 	/* Welcome message */
 	TRACE_DEBUG("The GRA Project");
 	TRACE_DEBUG("Input type: %d, %s", gOption.input, gOption.inputFile);
+
+	/* Training */
+	float labels[2] = {1.0, -1.0};
+    Mat labelsMat(2, 1, CV_32FC1, labels);
+
+    float trainingData[2][7] = {  {0.331761, 0.077379, 0.001497, 0.000141, -0.000000, -0.000026, 0.000000} ,
+    							  {0.303489, 0.049587, 0.002935, 0.000395, 0.000000, 0.000087, 0.000000}
+    						   };
+    Mat trainingDataMat(2, 7, CV_32FC1, trainingData);
+
+    // Set up SVM's parameters
+    CvSVMParams params;
+    params.svm_type    = CvSVM::C_SVC;
+    params.kernel_type = CvSVM::LINEAR;
+    params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
+
+    // Train the SVM
+    mySVM.train(trainingDataMat, labelsMat, Mat(), Mat(), params);
 
 	/* Create windows */
 	namedWindow("Original", CV_WINDOW_AUTOSIZE);

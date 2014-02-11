@@ -21,3 +21,9 @@ double globalThreshold::apply(cv::InputArray src, cv::OutputArray dst, double th
 					 	 CV_THRESH_BINARY   /* type */
 	);
 }
+
+double adaptThreshold::apply(cv::InputArray src, cv::OutputArray dst)
+{
+	cv::adaptiveThreshold(src, dst, 255, CV_ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 7, 0);
+	return 0;
+}
