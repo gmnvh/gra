@@ -4,7 +4,6 @@
 #include "opencv2/imgproc/imgproc.hpp"
 
 class globalThreshold {
-
 public:
 	double apply(cv::InputArray src, cv::OutputArray dst);
 	double apply(cv::InputArray src, cv::OutputArray dst, double thresh);

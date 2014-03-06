@@ -5,6 +5,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
 \usepackage[hmargin=2cm,vmargin=3.5cm,bmargin=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 
 % Global configuration
 \setcounter{secnumdepth}{3}		% Add level 3 of sections (can use \subsubsection in books)
@@ -23,11 +27,14 @@
 \listoftables 		% Lista de tabelas
 \listoffigures 		% Lista de figuras
 
-\input{chapter.objetivo.tex}
-\chapter{Teoria}
+%\chapter{Artigos}
+%\input{section.artigos.tex}
+\input{chapter.introducao.tex}
+\chapter{Revisão de Literatura}
 \input{section.momento.tex}
 \input{chapter.xxx.tex}
-
+\chapter{Resultados e discussão}
+\chapter{Conclusão}
 
 \begin{thebibliography}{2}
  
@@ -35,7 +42,7 @@
 \bibitem{ref2} Akyol, S., Canzler, U., Bengler, K., Hahn, W.: Gesture control for use in auto-mobiles. In: Proceedings, MV A 2000 Workshop on Machine Vision Applications, Tokyo, Japan, November 28-30, 2000, IAPR, ISBN 4-901122-00-2 (2000)
  
 \bibitem{kinect} http://www.microsoft.com/en-us/kinectforwindows/develop/
-\bibitem{intel}http://software.intel.com/en-us/vcsource/tools/perceptual-computing-sdk
+\bibitem{intel} http://software.intel.com/en-us/vcsource/tools/perceptual-computing-sdk
 
 \end{thebibliography}
 
