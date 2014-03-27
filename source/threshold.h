@@ -5,11 +5,21 @@
 
 class globalThreshold {
 public:
-	double apply(cv::InputArray src, cv::OutputArray dst);
-	double apply(cv::InputArray src, cv::OutputArray dst, double thresh);
+	virtual ~globalThreshold(){}
+	virtual double apply(cv::InputArray src, cv::OutputArray dst) = 0;
 };
 
-class adaptThreshold : globalThreshold {
+class otsuThreshold : public globalThreshold {
+public:
+	double apply(cv::InputArray src, cv::OutputArray dst);
+};
+
+class adaptThreshold : public globalThreshold {
+public:
+	double apply(cv::InputArray src, cv::OutputArray dst);
+};
+
+class meanThreshold : public globalThreshold {
 public:
 	double apply(cv::InputArray src, cv::OutputArray dst);
 };

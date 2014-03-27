@@ -128,7 +128,30 @@ void globalOtsuThreshold(void)
 		calcHist(&bgrPlanes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
 		g = mean(bgrPlanes[0]);
 	}
+	printf("Hist Mean: %f in %f ms\r\n", g.val[0], (((double)(getTickCount() - t1))/(10 * getTickFrequency())));
+
+	t1 = getTickCount();
+	for(unsigned i=0; i < 10000; i++) {
+		g = mean(imgGray);
+	}
 	printf("Mean: %f in %f ms\r\n", g.val[0], (((double)(getTickCount() - t1))/(10 * getTickFrequency())));
+
+	/* Using created classes */
+	globalThreshold *a = new otsuThreshold();
+	globalThreshold *b = new meanThreshold();
+	double t;
+
+	t1 = getTickCount();
+	for(unsigned i=0; i < 10000; i++) {
+		t = a->apply(imgGray, imgProc);
+	}
+	printf("Otsu: %f in %f ms\r\n", t, (((double)(getTickCount() - t1))/(10 * getTickFrequency())));
+
+	t1 = getTickCount();
+	for(unsigned i=0; i < 10000; i++) {
+		t = b->apply(imgGray, imgProc);
+	}
+	printf("Mean: %f in %f ms\r\n", t, (((double)(getTickCount() - t1))/(10 * getTickFrequency())));
 
 	/* Create windows */
 	namedWindow("Original", CV_WINDOW_AUTOSIZE);
@@ -321,7 +344,7 @@ char Pose[9][20] = {
 void getHuMoments(void)
 {
 	Mat searchImage, poseImage, image;
-	globalThreshold *thresh = new globalThreshold();
+	globalThreshold *thresh = new otsuThreshold();
 	gra searchGra(searchImage, *thresh);
 	gra poseGra(poseImage, *thresh);
 
@@ -466,7 +489,7 @@ void getHuMoments(void)
 int lowThreshold = 0;
 Mat lImgOriginal;
 Mat lImgProcessed;
-globalThreshold *thresh = new globalThreshold();
+globalThreshold *thresh = new otsuThreshold();
 gra mygra(lImgProcessed, *thresh);
 
 void approxPolygon(int, void*) {
@@ -737,7 +760,7 @@ void video(void)
 	lImgProcessed = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
 	lImgTemp = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
 
-	globalThreshold *thresh = new globalThreshold();
+	globalThreshold *thresh = new otsuThreshold();
 	gra mygra(lImgProcessed, *thresh);
 
 	while (1) {
