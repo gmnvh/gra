@@ -16,12 +16,16 @@ O lançamento do Kinect, da Microsoft \cite{kinect}, e da plataforma de desenvol
 
 O uso de câmeras em carros e caminhões também tem aumentando nos últimos anos. Sistemas de segurança capazes de verificar se o motorista esta saindo indevidamente da faixa, ou se o veículo esta em rota de colisão com algum outro automóvel ou objeto e até mesmo monitorando o stress do motorista já são comuns em vários modelos de veículos. Mas pouco vimos o uso dessas câmeras para interação do motorista com a grande quantidade de controles que temos nos carros. Aumentar ou diminuir o volume do rádio, trocar de faixa de música, dar zoom no mapa do sistema de navegação são alguns exemplos de comandos que poderia ser dados por meio de gestos.
 O sistema de gestos também pode ser usado como um complemento ao sistema de reconhecimento de voz, bastante comum hoje nos carros.
+O nosso estudo, portanto, é focado no uso de histograma de gradientes orientados (HOG - Histogram of oriented gradients) em um sistema de interface de usuário através de gestos. Um sistema em tempo real capaz de reconhecer poses de mão e gestos que permita o motorista interagir com o sistema de infotainment do veículo de forma intuitiva e eficaz.
+
+\todo Colocar uma foto do angulo de visão da câmera na nossa aplicação.
 
 \section{Objetivo}
 
-O objetivo do trabalho é discutir as principais técnicas para reconhecimento de gestos e poses de mão em um ambiente automotivo.
-Os algoritmos e metodologias hoje utilizados para segmentar e extrair características de imagens e vídeos devem ser estudados e verificados se atingem seu propósito em um ambiente automotivo.
-As características extraídas são utilizadas como entrada em um classificador, responsável por reconhecer gestos e poses de mão, e assim, permitir uma interação com o veículo traduzindo os gestos em comandos para o carro.
+O objetivo do trabalho é estudar o efeito da variação dos principais parâmetros do cálculo do HOG e assim encontrar qual a melhor configuração para a aplicação proposta. Um balanço entre performance e processamento deve ser levado em consideração, já que o trabalho computacional deve ser reduzido ao máximo para aplicações automotivas.
+Em \cite{} foi feito um trabalho parecido para encontrar o melhor conjunto de parâmetros para a representação de seres humanos em diversas situações e poses diferentes. O que queremos avaliar é se para a nossa aplicação, os mesmos parâmetros podem ser aplicados e qual seria o custo na performance do algoritmo se o mesmo fosse simplificado com o intuito de reduzir processamento.
+O HOG poderia ser usado de duas maneiras diferentes: como um pre classificador para encontrar as regiões mais prováveis de se ter uma mão e assim limitar a imagem em algumas regiões de interesse aonde um segundo algoritmo seria aplicado, nesse caso não seria trabalho do HOG dizer qual é a pose, mas sim se é uma mão ou não, ou no máximo classificar a pose em algum grupo de poses (como feito em \cite{ref10}). Mas o HOG poderia ser usado também para dizer qual pose é, sem a necessidade de nenhum algoritmo secundário.
+Visando que temos duas aplicações para o HOG, é possível que teremos duas configurações diferentes e portanto essas variações devem entrar no escopo desse trabalho.
 
 \section{Justificativa}
 
@@ -44,8 +48,6 @@ As metologias apresentadas para a segmentação, extração de características 
 
 \section{Metodologia}
 
-A metodologia do projeto abrange todas as principais etapas de um problema de visão computacional, com a captura da imagem, segmentação, extração de características, reconhecimento de padrões e interpretação dos resultados obtidos.
-
 Na etapa de captura da imagem, os artigos \cite{ref2} e \cite{ref1} fazem uso de uma câmera infravermelha simples, onde o ambiente é iluminado por infravermelho de curta distância (950nm). A câmera ainda possui um filtro de luz, permitindo apenas que a luz infravermelha seja capturada pela câmera. Apesar de existir câmeras mais sofisticadas, optamos por usar a câmera mais simples, em vez das câmeras de profundidade por ser mais compatível com os padrões de mercado automotivo. No momento que esse texto foi escrito, as câmeras de profundidade ainda possuem um preço proibitivo e a quantidade de processamento é bastante limitada em um ambiente embarcado. Uma outra razão para a escolha de uma câmera mais simples se dá ao fato que não pretendemos estudar nesse texto os processos de segmentação de imagem. Vamos considerar que esse problema esteja resolvido e vamos nos concentrar em como melhor representar e classificar as poses e gestos de mão.
 
 As imagens de poses e os vídeos dos gestos serão obtidos em  dois ambientes distintos. Primeiro em um ambiente controlado com fundo homogêneo de cor preta e em uma sala totalmente escura (essa base de dados será usada como referência para os algoritmos implementados). O outro será obtido no interior de um veículo, tanto de dia como de noite.
@@ -55,6 +57,55 @@ Grande parte dos artigos sobre reconhecimento de mãos utilizada a cor da pele c
 
 Depois da etapa de segmentação, vem a etapa de extração de características e é nessa etapa que vamos focar nossos estudos. Os artigos \cite{ref2} e \cite{ref1} utilizam os momentos Hu como vetor de características para poses de mão.
 Um dos precursores em extração de características da mão usando histograma de orientação de gradientes (HOG) foi o laboratório da Mitsubishi que publicou um conjunto de artigos \cite{ref3}, \cite{ref4} sobre o tema. Nesses artigos foi feito o HOG da imagem como um todo, em tons de cinza, e dividindo os ângulos em 36 grupos. O método não era geral o suficiente para ser usado com um algoritmo válido para representação de uma forma genérico e por isso, o mesmo evolui para o SIRF. Acontece que a aplicação é bastante parecida com a proposta desse trabalho e por isso HOG é melhor detalhado posteriormente.
+
+\todo Incluir ref 5.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% An Effective Crossing Cyclist Detection on a Moving Vehicle 
+Em \cite{ref6} (China, 2010) o HOG é utilizado para detectar ciclistas. No método proposto não é feito overlap no cálculo dos histogramas, como uma maneira de melhorar o tempo de processamento, e amostragem piramidal é utilizada para extrair características globais em diferentes escalas. As imagens utilizadas são em tons de cinza e um filtro gaussiano (smooth) é aplicado antes do cálculo dos HOGs. O gradiente é calculado com máscara [-1 0 +1], os ângulos são calculados entre 0 e 180, e o histograma é dividido em 20 bins. A imagem é dividida em blocos de 16x16 sem divisão de células. O classificador utilizado é um SVM linear. Esse trabalho é interessante pois propõe um método para melhorar a velocidade do cálculo dos histogramas, o que pode ser útil para aplicações em tempo real embarcadas.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Hand-gesture recognition: comparative study of global, semi-local and local approaches
+% 2011 / França
+% A base de dados não é pública.
+% [6] Descrição do SIFT.
+Um estudo comparando descritores locais, semi locais e globais é feito em \cite{ref7} (França, 2011). O objetivo do trabalho é estudar qual seria o método mais adequado para descrever poses de mão em uma sala de cirurgia para que o médico possa enviar comandos para os aparelhos sem precisa encostar neles. Para descritores globais foi usado os momentos de Zernike (invariante em rotação, translação e escala) combinados com um classificador linear SVM. O HOG é usado como um descritor semi local e SIFT para locais. Apesar de não dar detalhes de como é feito os cálculos do HOG, o artigo mostra uma melhor performance do método.
+
+% Automatic Ship Recognition Robust Against Aspect Angle Changes and Occlusions
+% 2012 / Japão - Laboratório da Toshiba
+% [6¨] Referência sobre coHOG
+Nesse artigo, é utilizado a coHOG (co-occurence HOG) para reconhecimento de navios em imagens ISAR. No coHOG os blocos são agrupados em pares, aumentado a robustes para imagens em diferentes ângulos e na oclusão  de algumas partes do navio. Por outro lado, o coHOG tem uma alta dimensão.
+
+% An Extended HOG Model: SCHOG for Human Hand Detection
+% 2012 / China
+% [1, 2] Verificar o que são essas referências
+% [7] Ler referência, o texto cita essa referência como o básico para HOG.
+% O porque usar SVM [11, 12]
+Nesse artigo o HOG é modificado para funcionar nas cores de pele. Usou apenas o gesto de palma aberta.	
+
+% A ROBUST METHOD OF FINGERTIP DETECTION IN COMPLEX BACKGROUND
+% 2012 / China - Nokia
+% [12] Verificar metodo de Viola & Jones
+% [14] Referência para HOG
+A abordagem desse artigo é selecionar usando HOG e SVM uma região de interesse para depois aplicar o filtro de cor de pele. O bloco tem tamanho 12x12 pixels com 2x2 células.
+However, discriminative HOG is usually computational because of its high dimension and histogram normalization.
+
+% Deformable HOG-based Shape Descriptor
+% 2013 - Espanha	
+% [8] - Referência à HOG do artigo
+A escrita a mão são compostas por região de pouca informação e outra com informação concentrada. A divisão feita normalmente pelo HOG é uma divisão rígida que não permite focar nas regiões de maior interesse.
+
+Parâmetros:
+
+- imagens tons de cinza (talvez comparar com imagens binárias);
+- filtros: sem filtro / gaussiano;
+- Máscara para cálculo do gradiente: [-1 0 +1]
+- Angulos: 0-180 ou 0-360
+- Numero de bins
+- Voted bin
+- Normalização em blocos
+- Numero de celulas
+- Numero de blocos
 
 Os classificadores mais utilizados na literatura existente serão avaliados, para que se conheça sua performance em relação a tempo de processamento e acerto. Desse estudo serão terminados os classificadores mais adequados para a aplicação proposta.
 
