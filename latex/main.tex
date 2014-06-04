@@ -5,10 +5,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
 \usepackage[hmargin=2cm,vmargin=3.5cm,bmargin=2cm]{geometry}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+
 
 % Global configuration
 \setcounter{secnumdepth}{3}		% Add level 3 of sections (can use \subsubsection in books)
@@ -19,8 +20,8 @@
 \begin{document}
 
 \author{Gustavo Müller Nunes}
-\title{Reconhecimento de imagens de gestos e poses de mão em um ambiente automotivo}
-\date{January 2014}
+\title{Histograma de gradientes para poses de mão em um ambiente automotivo}
+\date{June 2014}
 
 \maketitle
 \tableofcontents 	% Índice de conteúdos
@@ -30,20 +31,22 @@
 %\chapter{Artigos}
 %\input{section.artigos.tex}
 \input{chapter.introducao.tex}
-\chapter{Revisão de Literatura}
-\input{section.momento.tex}
-\input{chapter.xxx.tex}
-\chapter{Resultados e discussão}
-\chapter{Conclusão}
+%\chapter{Revisão de Literatura}
+%\input{section.momento.tex}
+%\input{chapter.xxx.tex}
+%\chapter{Resultados e discussão}
+%\chapter{Conclusão}
 
 \begin{thebibliography}{2}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Gesture Components for Natural Interaction with In-Car devices
+% 2001 / Alemanha
 \bibitem{ref1} Zobl, M., Nieschulz, R., Geiger, M., Lang M., Rigoll, G.,{Gesture Components for Natural Interaction with In-Car devices}, 2003.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Gesture control for use in auto-mobiles
+% 2000 / Alemanha
 \bibitem{ref2} Akyol, S., Canzler, U., Bengler, K., Hahn, W.: Gesture control for use in auto-mobiles. In: Proceedings, MV A 2000 Workshop on Machine Vision Applications, Tokyo, Japan, November 28-30, 2000, IAPR, ISBN 4-901122-00-2 (2000)
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -51,7 +54,15 @@
 \bibitem{ref3} W. T. Freeman and M. Roth. Orientation histograms for hand gesture recognition. Intl. Workshop on Automatic Face and Gesture-Recognition, IEEE Computer Society, Zurich, Switzerland, pages 296–301, June 1995.
 \bibitem{ref4} W. T. Freeman, K. Tanaka, J. Ohta, and K. Kyuma. Computer vision for computer games. 2nd International Conference on Automatic Face and Gesture Recognition, Killington, VT, USA, pages 100–105, October 1996.
 
-% Artigo de 2008 com câmera infra no carro e uso de HOG e SVM
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Real-time Vision-based Infotainment User Determination for Driver Assistance
+% 2008 / Estados Unidos
+% Artigo com câmera infra no carro e uso de HOG e SVM.
+% Criou sua própria base de dados (4 horas diferentes do dia com 8 individuos).
+% Possue um descrição do SVM que pode ser usada no futuro.
+% [8] Descritor de mão usando Haar-wavelet.
+% [9] Detecção de mão usando imagens térmicas.
+% [10] Referência ao SIFT. 
 \bibitem{ref5} Shinko Y. Cheng and Mohan M. Trivedi. Real-time Vision-based Infotainment User Determination for Driver Assistance, IEEE Intelligent Vehicles Symposium, June 4-6, 2008
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -60,11 +71,36 @@
 % Tem a formula da normalizacao
 % [10] No overlap HOG local features / Mais informação de como calcular o HOG
 \bibitem{ref6} An Effective Crossing Cyclist Detection on a Moving Vehicle
+
 \bibitem{ref7} Hand-gesture recognition: comparative study of global, semi-local and local approaches
 \bibitem{ref8} Automatic Ship Recognition Robust Against Aspect Angle Changes and Occlusions
 \bibitem{ref9} An Extended HOG Model: SCHOG for Human Hand Detection
 \bibitem{ref10} A ROBUST METHOD OF FINGERTIP DETECTION IN COMPLEX BACKGROUND
 \bibitem{ref11} Deformable HOG-based Shape Descriptor
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Gesture-based control of in-car devices
+% Ainda não consegui baixar
+\bibitem{ref12} Zobl, M., Geiger, M., Morguet, P., Nieschulz, R., Lang, M.: Gesture-based control of in-car devices. In: VDI-Berichte 1678: USEWARE 2002 Mensch-Maschine-Kommunikation/Design, GMA Fachtagung USEWARE 2002, Darmstadt, Germany, June 11-12, 2002, Dusseldorf, VDI, VDI-Verlag (2002) 305–309
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% A usability study on hand gesture controlled operation of in-car devices
+% Artigo de justificativa (usabilidade)
+\bibitem{ref13} Zobl, M., Geiger, M., Bengler, K., Lang, M.: A usability study on hand gesture controlled operation of in-car devices. In: Abridged Proceedings, HCI 2001 9th Int. Conference on Human Machine Interaction, New Orleans, Louisiana, USA, August 5-10, 2001, New Jersey, Lawrence Erlbaum Ass. (2001) 166–168
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Intermodal differences in distraction eﬀects while controlling automotive user interfaces
+% Artigo de justificativa (usabilidade)
+\bibitem{ref14} Geiger, M., Zobl, M., Bengler, K., Lang, M.: Intermodal differences in distraction effects while controlling automotive user interfaces. In: Proceedings Vol. 1: Usability Evaluation and Interface Design , HCI 2001 9th Int. Conference on Human Machine Interaction, New Orleans, Louisiana, USA, August 5-10, 2001, New Jersey, Lawrence Erlbaum Ass. (2001) 263–267
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Distinctive Image Features from Scale-Invariant Keypoints
+% Descrição do SIFT.
+\bibitem{ref15} D. G. Lowe, “Distinctive image features from scale-invariant keypoints,” Int. J. Comput. Vis., vol. 60, no. 2, pp. 91–110, Nov. 2004. 
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Histograms of Oriented Gradients for Human Detection
+\bibitem{dalal} Dalal, N. and Triggs, M, "Histograms of Oriented Gradients for Human Detection", in Proc. Of IEEE CVPR2005, vol. 1, pp. 886-893, June 2005.
 
 \bibitem{kinect} http://www.microsoft.com/en-us/kinectforwindows/develop/
 \bibitem{intel} http://software.intel.com/en-us/vcsource/tools/perceptual-computing-sdk
