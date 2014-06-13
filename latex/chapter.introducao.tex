@@ -44,7 +44,7 @@ As condições gerais dentro do automóvel inclui uma grande variação de ilumi
 \item reação do sistema com o mínimo de latência
 \end{itemize}
 
-Em 2005, Navneet Dalal fez um estudo sobre histogramas orientado a gradientes aplicado à detecção de humanos \cite{dalal}. Seu estudo, variando cada parâmetro do cálculo dos histogramas e encontrando um conjunto de parâmetros que melhor servia para reconhecimento de humanos, virou referência para todos os estudos posteriores de HOG. Em seu texto ele diz que o uso de histogramas orientados tem muitos precursores (\todo{Adicionar ref}), mas que apenas atingiu a maturidade quando combinado com histogramas locais e normalização proposto pela Lowe´s Scale Invariant Feature Transformation (SIFT) (\todo{Adicionar ref}). A conclusão que ele chegou foi que usando histogramas de gradientes locais normalizados, similar ao SIFT, em um grade com sobreposição tem ótimos resultados para detecção de humanos, reduzindo falsos positivos em mais de uma ordem de magnitude comparado com Haar wavelets.
+Em 2005, Navneet Dalal fez um estudo sobre histogramas orientado a gradientes aplicado à detecção de humanos \cite{dalal}. Seu estudo, variando cada parâmetro do cálculo dos histogramas e encontrando um conjunto de parâmetros que melhor servia para reconhecimento de humanos, virou referência para todos os estudos posteriores de HOG. Em seu texto ele diz que o uso de histogramas orientados tem muitos precursores (\todo{Adicionar ref}), mas que apenas atingiu a maturidade quando combinado com histogramas locais e normalização proposto pela Lowes Scale Invariant Feature Transformation (SIFT) (\todo{Adicionar ref}). A conclusão que ele chegou foi que usando histogramas de gradientes locais normalizados, similar ao SIFT, em um grade com sobreposição tem ótimos resultados para detecção de humanos, reduzindo falsos positivos em mais de uma ordem de magnitude comparado com Haar wavelets.
 
 \todo {Pesquisar as principais diferenças entre SIFT e HOG}
 
@@ -66,17 +66,11 @@ Em \cite{ref6} (China, 2010) o HOG é utilizado para detectar ciclistas. No mét
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Hand-gesture recognition: comparative study of global, semi-local and local approaches
-% 2011 / França
-% A base de dados não é pública.
-% [6] Descrição do SIFT.
 Um estudo comparando descritores locais, semi locais e globais é feito em \cite{ref7} (França, 2011). O objetivo do trabalho é estudar qual seria o método mais adequado para descrever poses de mão em uma sala de cirurgia para que o médico possa enviar comandos para os aparelhos sem precisa encostar neles. Para descritores globais foi usado os momentos de Zernike (invariante em rotação, translação e escala) combinados com um classificador linear SVM. O HOG é usado como um descritor semi local e SIFT para locais. Apesar de não dar detalhes de como é feito os cálculos do HOG, o artigo mostra uma melhor performance do método.
 
-\todo {Falta a análise de mais ou menos uns 7 artigos ainda}
-
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Automatic Ship Recognition Robust Against Aspect Angle Changes and Occlusions
-% 2012 / Japão - Laboratório da Toshiba
-% [6¨] Referência sobre coHOG
-%Nesse artigo, é utilizado a coHOG (co-occurence HOG) para reconhecimento de navios em imagens ISAR. No coHOG os blocos são agrupados em pares, aumentado a robustes para imagens em diferentes %ângulos e na oclusão de algumas partes do navio. Por outro lado, o coHOG tem uma alta dimensão.
+Nesse artigo \cite{ref8} (Japão, 2012), é utilizado a coHOG (co-occurence HOG) para reconhecimento de navios em imagens ISAR. No coHOG os blocos são agrupados em pares, aumentado a robustez para imagens em diferentes ângulos e na oclusão de algumas partes do navio. Por outro lado, o coHOG tem uma alta dimensão.
 
 % An Extended HOG Model: SCHOG for Human Hand Detection
 % 2012 / China
@@ -86,11 +80,7 @@ Um estudo comparando descritores locais, semi locais e globais é feito em \cite
 %Nesse artigo o HOG é modificado para funcionar nas cores de pele. Usou apenas o gesto de palma aberta.	
 
 % A ROBUST METHOD OF FINGERTIP DETECTION IN COMPLEX BACKGROUND
-% 2012 / China - Nokia
-% [12] Verificar metodo de Viola & Jones
-% [14] Referência para HOG
-%A abordagem desse artigo é selecionar usando HOG e SVM uma região de interesse para depois aplicar o filtro de cor de pele. O bloco tem tamanho 12x12 pixels com 2x2 células.
-%However, discriminative HOG is usually computational because of its high dimension and histogram normalization.
+A abordagem desse artigo \cite{ref10} (China, 2012) é selecionar, usando HOG e SVM, uma região de interesse para depois aplicar o filtro de cor de pele. O bloco tem tamanho 12x12 pixels com 2x2 células.
 
 % Deformable HOG-based Shape Descriptor
 % 2013 - Espanha	
@@ -121,10 +111,37 @@ Os classificadores mais utilizados na literatura existente serão avaliados, par
 
 \todo{Elaborar no final}
 
+\chapter{Teoria}
+
 \section{Histograma orientado a gradientes}
 
 HOG (Histogram of oriented gradients) é um descritor computado a partir dos gradientes da imagem, podemos defini-lo com sendo uma informação estatística do gradiente e intensidade de uma área. Suas principais propriedades são a robustez para pequenas variações nos locais dos contornos, direções e variações significativas na iluminação e cor.
-Ele é composto por primeiro calculando o gradiente da imagem. 
+
+O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conforme tabela \ref{table:dlal_hog}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline Cor & RGB sem correção de gamma \\ 
+\hline Gradiente & [-1, 0, 1] sem smoothing \\ 
+\hline Bins & 9 \\
+\hline Orientação & 0 à 180 \\
+\hline Tamanho do bloco & 16x16 pixels \\
+\hline Tamanho da célula & 8x8 pixels \\
+\hline Janela Gaussian & 8 pixel \\
+\hline Normalização & L2-Hys \\
+\hline Janela de detecção & 64x128 \\
+\hline 
+\end{tabular} 
+\caption{Parâmetros do HOG otimizado por Dalal}
+\label{table:dlal_hog}
+\end{table}
+
+\subsection{Normalização Gamma/Cor}
+
+\subsection{Gradientes}
+
+O gradiente é computado da seguinte maneira.
 
 \[G_{x}(x,y) = H(x+1, y) - H(x-1, y)\]
 \[G_{y}(x,y) = H(x, y+1) - H(x, y-1)\]
@@ -136,7 +153,9 @@ Depois calculamos a intensidade e orientação de cada ponto da imagem.
 \[G(x,y) = \sqrt{G_{x}(x,y)^{2} + G_{y}(x,y)^{2}}\]
 \[\alpha (x,y) = tan^{-1} \left(\frac{G_{y}(x,y)}{G_{x}(x,y)}\right)\]
 
-Depois dos calculos do gradiente, a imagem é então dividida em pequenos retângulos (células). Para cada célula, um histograma é calculado. Esse histograma é a coleção dos ângulos dos vetores de gradiente de cada pixel que compõe a célula. Os ângulos podem ser agrupados variando de 0 à 360 graus ou de 0 à 180 graus. O número de grupos em cada histograma é 20.
+\subsection{Classificação dos ângulos}
+
+Depois dos cálculos do gradiente, a imagem é então dividida em pequenos retângulos (células). Para cada célula, um histograma é calculado. Esse histograma é a coleção dos ângulos dos vetores de gradiente de cada pixel que compõe a célula. Os ângulos podem ser agrupados variando de 0 à 360 graus ou de 0 à 180 graus. O número de grupos em cada histograma é 20.
 
 \[
 V_{k}(x,y) = \left\{\begin{matrix}
@@ -144,6 +163,8 @@ G(x,y), \alpha (x,y)  \in bin_{k}\\
 0, \alpha (x,y) \notin bin_{k}
 \end{matrix}\right. k \in (1,20)
 \]
+
+\subsection{Normalização em blocos}
 
 Dalal extraiu o HOG em blocos de tamanho 16x16 e dividiu cada bloco em 4 células. Para eliminar os impactos da luminosidade, foi feito uma normalização em cada bloco.
 
