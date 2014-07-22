@@ -1,0 +1,100 @@
+\chapter{Referencial Teórico}
+
+\section{Histograma}
+
+\section{Gradientes}
+
+Um dos mais importantes processos no processamento de uma imagem é a sua segmentação. A segmentação consiste em subdividir a imagem em regiões ou objetos de interesse. O nível de segmentação depende do problema a ser resolvido e é comumente baseado em duas propriedades do valor da intensidade: descontinuidade e similaridade. A primeira consiste em particionar uma imagem baseado nas mudanças abruptas na intensidade, como por exemplo as bordas de um objeto. Já na segunda, é feito o agrupamento de uma região baseado em sua similaridade com outras partes da imagem, como cor ou nível de intensidade.
+
+\begin{center}
+\begin{tabular}{| l |c | r |}
+\hline
+w1 & w2 & w3 \\ \hline
+w4 & w5 & w6 \\ \hline
+w7 & w8 & w9 \\ \hline
+\end{tabular}
+\end{center}
+
+\[R = w1z1 + w2z2 + w3z3 + ... +w9z9 = \sum_{i=1}^{9}{wizi}\]
+
+\section{Histograma orientado a gradientes}
+
+HOG (Histogram of oriented gradients) é um descritor computado a partir dos gradientes da imagem, podemos defini-lo com sendo uma informação estatística do gradiente e intensidade de uma área. Suas principais propriedades são a robustez para pequenas variações nos locais dos contornos, direções e variações significativas na iluminação e cor.
+
+O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conforme tabela \ref{table:dlal_hog}.
+
+\todo {Ver \cite{ref16} para uma descrição do HOG}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline Cor & RGB sem correção de gamma \\ 
+\hline Gradiente & [-1, 0, 1] sem smoothing \\ 
+\hline Bins & 9 \\
+\hline Orientação & 0 à 180 \\
+\hline Tamanho do bloco & 16x16 pixels \\
+\hline Tamanho da célula & 8x8 pixels \\
+\hline Janela Gaussian & 8 pixel \\
+\hline Normalização & L2-Hys \\
+\hline Janela de detecção & 64x128 \\
+\hline 
+\end{tabular} 
+\caption{Parâmetros do HOG otimizado por Dalal}
+\label{table:dlal_hog}
+\end{table}
+
+\subsection{Normalização Gamma/Cor}
+
+\subsection{Gradientes}
+
+O gradiente é computado da seguinte maneira.
+
+\[G_{x}(x,y) = H(x+1, y) - H(x-1, y)\]
+\[G_{y}(x,y) = H(x, y+1) - H(x, y-1)\]
+
+Aqui, \(G_{x}\) representa o gradiente horizontal e \(G_{y}\) o gradiente vertical de cada pixel na imagem (ou em um pedaço da imagem).
+
+Depois calculamos a intensidade e orientação de cada ponto da imagem.
+
+\[G(x,y) = \sqrt{G_{x}(x,y)^{2} + G_{y}(x,y)^{2}}\]
+\[\alpha (x,y) = tan^{-1} \left(\frac{G_{y}(x,y)}{G_{x}(x,y)}\right)\]
+
+\subsection{Classificação dos ângulos}
+
+Depois dos cálculos do gradiente, a imagem é então dividida em pequenos retângulos (células). Para cada célula, um histograma é calculado. Esse histograma é a coleção dos ângulos dos vetores de gradiente de cada pixel que compõe a célula. Os ângulos podem ser agrupados variando de 0 à 360 graus ou de 0 à 180 graus. O número de grupos em cada histograma é 20.
+
+\[
+V_{k}(x,y) = \left\{\begin{matrix}
+G(x,y), \alpha (x,y)  \in bin_{k}\\ 
+0, \alpha (x,y) \notin bin_{k}
+\end{matrix}\right. k \in (1,20)
+\]
+
+\subsection{Normalização em blocos}
+
+Dalal extraiu o HOG em blocos de tamanho 16x16 e dividiu cada bloco em 4 células. Para eliminar os impactos da luminosidade, foi feito uma normalização em cada bloco.
+
+\[
+f(C_{i},k) = \frac
+{\sum_{(x,y) \in C_i}V_k(x,y) + \varepsilon}
+{\sum_{(x,y) \in B}V_k(x,y) + \varepsilon}
+\]
+
+\(f(C_i,k)\) é a proporção do valor do gradiente acumulado do kth bin no bloco que contém a célula \(C_i\). O \(\varepsilon\) é um valor bem pequeno para eliminar os denominadores zeros.
+
+Depois cada histograma é concatenado, formando um vetor único de características.
+
+%Parâmetros:
+%
+%- imagens tons de cinza (talvez comparar com imagens binárias);
+%- filtros: sem filtro / gaussiano;
+%- Máscara para cálculo do gradiente: [-1 0 +1]
+%- Angulos: 0-180 ou 0-360
+%- Numero de bins
+%- Voted bin
+%- Normalização em blocos
+%- Numero de celulas
+%- Numero de blocos
+
+
+

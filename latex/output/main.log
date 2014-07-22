@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.8.27)  12 FEB 2014 16:03
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.8.27)  22 JUL 2014 15:25
 entering extended mode
 **main.tex
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.tex
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\main.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -516,21 +516,21 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 )
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -581,7 +581,7 @@ LaTeX Font Info:    ... okay on input line 19.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \AtBeginShipoutBox=\box29
-Package hyperref Info: Link coloring OFF on input line 19.
+Package hyperref Info: Link coloring OFF on input line 20.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -590,19 +590,19 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count121
 )
-LaTeX Info: Redefining \ref on input line 19.
-LaTeX Info: Redefining \pageref on input line 19.
-LaTeX Info: Redefining \nameref on input line 19.
+LaTeX Info: Redefining \ref on input line 20.
+LaTeX Info: Redefining \pageref on input line 20.
+LaTeX Info: Redefining \nameref on input line 20.
 
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.out)
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.out)
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.out)
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.out)
 \@outlinefile=\write3
-LaTeX Font Info:    Try loading font information for U+msa on input line 26.
+LaTeX Font Info:    Try loading font information for U+msa on input line 27.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 26.
+LaTeX Font Info:    Try loading font information for U+msb on input line 27.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -610,156 +610,102 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.toc)
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.toc)
 \tf@toc=\write4
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.27 \listoftables
+l.28 \listoftables
                    		% Lista de tabelas [1
 
 ]
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.lot)
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.lot)
 \tf@lot=\write5
  [2
 
 ]
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.lof)
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.lof)
 \tf@lof=\write6
 
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\chapter.introducao.tex
-[3
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\chapter.introducao.tex [3
 
 ]
 Cap\'{\i }tulo 1.
-<image/kinect_camera.png, id=137, 295.1025pt x 152.06813pt>
+<image/kinect_camera.png, id=110, 295.1025pt x 152.06813pt>
 File: image/kinect_camera.png Graphic file (type png)
 
 <use image/kinect_camera.png>
-Package pdftex.def Info: image/kinect_camera.png used on input line 14.
+Package pdftex.def Info: image/kinect_camera.png used on input line 12.
 (pdftex.def)             Requested size: 145.11053pt x 74.77623pt.
 
-<image/intel_creative_camera.jpg, id=138, 446.66875pt x 251.94125pt>
+<image/intel_creative_camera.jpg, id=111, 446.66875pt x 251.94125pt>
 File: image/intel_creative_camera.jpg Graphic file (type jpg)
 
 <use image/intel_creative_camera.jpg>
-Package pdftex.def Info: image/intel_creative_camera.jpg used on input line 14.
+Package pdftex.def Info: image/intel_creative_camera.jpg used on input line 12.
 
 (pdftex.def)             Requested size: 145.11053pt x 81.84917pt.
  [4
 
- <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/gra/rep/latex/image/kinect_camera.png> <
-D:/Gustavo/Pessoal/Mestrado/FEI/Tese/gra/rep/latex/image/intel_creative_camera.
-jpg>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 35.
+ <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/kinect_camera.png> <D:/G
+ustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/intel_creative_camera.jpg>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 39.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
- [5]) [6]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 39.
+ [5] [6])
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\chapter.referencial.teorico.tex
+[7]
 Cap\'{\i }tulo 2.
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\section.momento.tex)
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\chapter.xxx.tex
-Overfull \hbox (72.42586pt too wide) in paragraph at lines 19--1
-[][] 
- []
 
-[7
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-]
-Cap\'{\i }tulo 3.
-<image/webcam01.jpg, id=166, 422.57875pt x 524.96124pt>
-File: image/webcam01.jpg Graphic file (type jpg)
+[8
 
-<use image/webcam01.jpg>
-Package pdftex.def Info: image/webcam01.jpg used on input line 18.
-(pdftex.def)             Requested size: 145.11053pt x 180.27074pt.
- <image/webcam02.jpg, id=167, 805.0075pt x 590.205pt>
-File: image/webcam02.jpg Graphic file (type jpg)
-
-<use image/webcam02.jpg>
-Package pdftex.def Info: image/webcam02.jpg used on input line 26.
-(pdftex.def)             Requested size: 145.11053pt x 106.3854pt.
- <image/webcam03.jpg, id=168, 333.245pt x 233.87375pt>
-File: image/webcam03.jpg Graphic file (type jpg)
-
-<use image/webcam03.jpg>
-Package pdftex.def Info: image/webcam03.jpg used on input line 34.
-(pdftex.def)             Requested size: 145.11053pt x 101.84131pt.
- <image/webcam04.jpg, id=169, 333.245pt x 233.87375pt>
-File: image/webcam04.jpg Graphic file (type jpg)
-
-<use image/webcam04.jpg>
-Package pdftex.def Info: image/webcam04.jpg used on input line 42.
-(pdftex.def)             Requested size: 145.11053pt x 101.84131pt.
- <image/webcam05.jpg, id=170, 305.14pt x 282.05376pt>
-File: image/webcam05.jpg Graphic file (type jpg)
-
-<use image/webcam05.jpg>
-Package pdftex.def Info: image/webcam05.jpg used on input line 50.
-(pdftex.def)             Requested size: 145.11053pt x 134.13615pt.
-) [8
-
- <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/gra/rep/latex/image/webcam01.jpg>] [9 <D
-:/Gustavo/Pessoal/Mestrado/FEI/Tese/gra/rep/latex/image/webcam02.jpg> <D:/Gusta
-vo/Pessoal/Mestrado/FEI/Tese/gra/rep/latex/image/webcam03.jpg> <D:/Gustavo/Pess
-oal/Mestrado/FEI/Tese/gra/rep/latex/image/webcam04.jpg> <D:/Gustavo/Pessoal/Mes
-trado/FEI/Tese/gra/rep/latex/image/webcam05.jpg>]
-Cap\'{\i }tulo 4.
-[10
+]) [9] [10
 
 ]
-Cap\'{\i }tulo 5.
-[11
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 133.
+ [11]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 133.
 
-]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 49.
- [12
-
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 49.
- (D:\Gustavo\Pessoal\Mestrado\FEI\Tese\gra\rep\latex\main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 49.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 49.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 26DF27F793BD3CE380107034AFCE666C;1226
-(rerunfilecheck)             After:  AC5A3C7B07422F7091B2BB7CD7E3CC30;1227.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 49.
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 133.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 133.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: F3075178A63332904AB6814F84CD85D7;1007.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 133.
  ) 
 Here is how much of TeX's memory you used:
- 7008 strings out of 493921
- 100083 string characters out of 3144882
- 192408 words of memory out of 3000000
- 10139 multiletter control sequences out of 15000+200000
+ 6998 strings out of 493921
+ 99763 string characters out of 3144882
+ 194629 words of memory out of 3000000
+ 10130 multiletter control sequences out of 15000+200000
  13263 words of font info for 49 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 29i,10n,31p,718b,362s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29i,13n,31p,1032b,459s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
 :/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/
 Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pr
-ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86
-)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (13 pages, 669754 bytes).
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Progr
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/output/main.pd
+f (12 pages, 294976 bytes).
 PDF statistics:
- 252 PDF objects out of 1000 (max. 8388607)
- 46 named destinations out of 1000 (max. 500000)
- 188 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 256 PDF objects out of 1000 (max. 8388607)
+ 52 named destinations out of 1000 (max. 500000)
+ 131 words of extra memory for PDF output out of 10000 (max. 10000000)
 
