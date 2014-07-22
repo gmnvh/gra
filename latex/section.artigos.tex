@@ -28,3 +28,23 @@ Suat Akyol, Ulrich Canzler, Klaus Bengler, Wolfgang Hahn
 \item filtragem do braço
 \item classificador 
 \end{enumerate}
+
+%****************************************************************************************
+\section{Computer Vision for Interactive Computer Graphics}
+
+No item 3.1 tem uma figura de um mapa de orientação de uma imagem, mas não diz como calcular esse mapa.
+
+Nesse site mostra um exemplo de como calcular o mapa de orientação:
+http://answers.opencv.org/question/9493/fingerprint-orientation-map-through-gradient/
+
+Função do MATLAB para plotar os vetores calculadados:
+http://www.mathworks.com/help/matlab/ref/quiver.html
+
+Esse artigo talvez seja uma referencia para esse mapa:
+http://www.math-info.univ-paris5.fr/~moisan/papers/dequant.pdf
+
+Funções para converter de cartesiano para polar:
+http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#polartocart
+
+A idéia então para plotar o mapa de orientação será simplesmente somar nas coordenadas x e y o valor do gradiente normalizado.
+Por exemplo, calcular o vetor em cada 10 pixels ou fazer uma media.

@@ -14,15 +14,54 @@ void globalThresholdTest(void)
 	unsigned i, j, k;
 
 	/* List of images to calculate */
-	char imgList[][20] = {
-			"lenna.png",
-			"cupcake.jpg"
+	char imgList[][100] = {
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_01.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_02.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_03.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_04.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_05.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_06.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_07.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_08.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_09.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_10.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_11.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_12.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_13.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_14.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_15.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_16.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_17.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_18.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_19.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_20.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_21.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_22.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\0_23.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\1_01.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\1_02.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\1_03.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\1_04.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\1_05.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\1_06.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_01.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_02.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_03.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_04.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_05.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_06.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_07.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_08.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_09.jpg",
+			"D:\\Gustavo\\Pessoal\\Mestrado\\FEI\\Tese\\gra\\photos\\ir_training\\2_10.jpg",
+
 	};
 
 	/* List of thresholds to test */
 	struct {globalThreshold *thresInst; char desc[20];} thresList[] = {
 			{new otsuThreshold(), "Otsu"},
-			{new meanThreshold(), "Mean"}
+			{new meanThreshold(), "Mean"},
+			{new adaptThreshold(), "Adapt"}
 	};
 
 	for (i=0; i < (sizeof(imgList)/sizeof(imgList[0])); i++) {
@@ -51,7 +90,7 @@ void globalThresholdTest(void)
 			printf("%s: %f in %f ms\r\n", thresList[j].desc, thres, (((double)(getTickCount() - t1))/(10 * getTickFrequency())));
 
 			/* Create output files */
-			char filename[20];
+			char filename[100];
 			sprintf(filename, "%s_%s.jpg", imgList[i], thresList[j].desc);
 			imwrite(filename, imgProc);
 		}

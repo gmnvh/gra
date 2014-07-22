@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <opencv2/video/background_segm.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv/cv.h"
@@ -15,6 +16,7 @@
 #include "histogram.h"
 
 #include "threshold.h"
+#include "contours.h"
 #include "gra.h"
 
 #define THIS_MODULE "MAIN"
@@ -88,53 +90,6 @@ int options(int argc, char **argv)
 	}
 
 	return lRsp;
-}
-
-void contours(void)
-{
-	Mat imgOriginal, imgProc;
-
-	/* Open image */
-	imgOriginal = imread("open_hand.jpg", CV_LOAD_IMAGE_COLOR);
-
-	if (imgOriginal.data == NULL) {
-		printf("Unable to open file!\r\n");
-		return;
-	}
-
-	/* Convert to gray scale */
-	cvtColor(imgOriginal, imgProc, CV_BGR2GRAY);
-
-	/* Apply the threshold */
-	double thres = threshold(imgProc, imgProc, 255, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-	printf("Otsu threshold: %f\r\n", thres);
-
-	/* Find contours with no hierarchy */
-	vector<vector<Point> > contours;
-
-	findContours(imgProc, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0,0));
-	printf("Number of contours: %u\r\n", (unsigned)contours.size());
-
-	/* Draw all contours */
-	RNG rng(12345);
-
-	for (unsigned i=0; i < contours.size(); i++) {
-		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
-		drawContours(imgProc, contours, i, color, 2);
-		printf("Number of point for contour %u: %u\r\n", i, contours[i].size());
-	}
-
-	/* Create windows */
-	namedWindow("Original", CV_WINDOW_AUTOSIZE);
-	namedWindow("Processed", CV_WINDOW_AUTOSIZE);
-
-	/* Show images */
-	imshow("Original", imgOriginal);
-	imshow("Processed", imgProc);
-
-	cvWaitKey(0);
-	imwrite("0_08_contours.jpg", imgProc);
-	return;
 }
 
 void proc01(Mat &image, globalThreshold *thresh) {
@@ -442,9 +397,78 @@ float angleBetween(const Point &v1, const Point &v2, const Point &v3)
 	return acos(x);
 }
 
-#define COLOR_BLUE 		Scalar(240, 90, 110)
-#define COLOR_RED		Scalar(15, 15, 210)
-#define COLOR_DARk_RED	Scalar(12, 12, 148)
+#define COLOR_BLACK		Scalar(0, 0, 0)
+#define COLOR_WHITE		Scalar(255, 255, 255)
+#define COLOR_RED		Scalar(0, 0, 255)
+#define COLOR_LIME		Scalar(0, 255, 0)
+#define COLOR_BLUE 		Scalar(255, 0, 0)
+#define COLOR_YELLOW	Scalar(0, 255, 255)
+#define COLOR_CYAN		Scalar(255, 255, 0)
+#define COLOR_MAGENTA	Scalar(255, 0, 255)
+#define COLOR_SILVER	Scalar(192, 192, 192)
+#define COLOR_GRAY		Scalar(128, 128, 128)
+#define COLOR_MARRON	Scalar(0, 0, 128)
+#define COLOR_OLIVE		Scalar(0, 128, 128)
+#define COLOR_GREEN		Scalar(0, 128, 0)
+#define COLOR_PURPLE	Scalar(128, 0, 128)
+#define COLOR_TEAL		Scalar(128, 128, 0)
+#define COLOR_NAVY		Scalar(128, 0, 0)
+
+#define PALM_RADIUS_ROI				((double)3.5)
+#define PALM_RADIUS_MIN				10
+#define PALM_RADIUS_MAX				20
+#define PALM_CENTER_COLOR			COLOR_MARRON
+#define PALM_CENTER_RADIUS_COLOR	COLOR_MARRON
+#define PALM_CENTER_MULTI_COLOR		COLOR_MARRON
+
+#define CONTOUR_AREA_MIN 	10000
+#define CONTOUR_AREA_MAX	30000
+
+#define EXCEPTION_PALM_RADIUS_MIN 	1
+#define EXCEPTION_PALM_RADIUS_MAX 	2
+#define EXCEPTION_CONTOUR_AREA_MIN 	3
+#define EXCEPTION_CONTOUR_AREA_MAX 	4
+
+void palmCenter(Mat &image, Point &location, double &radius)
+{
+	Mat imgDistance;
+	double minVal;
+	Point minLoc;
+
+	distanceTransform(image, imgDistance, CV_DIST_L2, CV_DIST_MASK_PRECISE);
+	minMaxLoc(imgDistance, &minVal, &radius, &minLoc, &location);
+}
+
+void palmValidation(double radius)
+{
+	if (radius < PALM_RADIUS_MIN) {
+		throw EXCEPTION_PALM_RADIUS_MIN;
+	}
+
+	if (radius > PALM_RADIUS_MAX) {
+		throw EXCEPTION_PALM_RADIUS_MAX;
+	}
+}
+
+void palmDraw(Mat &image, Point location, double radius)
+{
+	/* Draw the palm center */
+	circle(lImgOriginal, location, 3, PALM_CENTER_COLOR, -1, 8, 0);
+	circle(lImgOriginal, location, radius, PALM_CENTER_RADIUS_COLOR, 1, 8, 0);
+	circle(lImgOriginal, location, (int)(PALM_RADIUS_ROI * radius), PALM_CENTER_MULTI_COLOR, 1, 8, 0);
+}
+
+void contourAreaValidation(double area)
+{
+	if (area < CONTOUR_AREA_MIN) {
+		throw EXCEPTION_CONTOUR_AREA_MIN;
+	}
+
+	if (area > CONTOUR_AREA_MAX) {
+		throw EXCEPTION_CONTOUR_AREA_MAX;
+	}
+}
+
 
 void image(void)
 {
@@ -453,6 +477,9 @@ void image(void)
 	float maxCircleRadius;
 	Point2f maxCircleLoc;
 	vector<int> fingers;
+
+	globalThreshold *th = new otsuThreshold();
+	biggestContour *ct = new biggestContour();
 
 	lImgOriginal = imread(gOption.inputFile, CV_LOAD_IMAGE_COLOR);
 
@@ -464,8 +491,7 @@ void image(void)
 	/* It is necessary to convert to gray scale before apply the filter */
 	cvtColor(lImgOriginal, lImgProcessed, CV_BGR2GRAY);
 
-	double t = mygra.threshold();
-	TRACE_INFO("Global threshold: %u", (unsigned) t);
+	th->apply(lImgProcessed, lImgProcessed);
 
 	/* Find the palm center */
 	{
@@ -484,38 +510,36 @@ void image(void)
 	circle(lImgOriginal, palmCenterLoc, (int)(3.5 * palmCenterRadius), Scalar(100, 0, 255), 1, 8, 0);
 
 	/* Find the contours */
-	size_t contoursSize = mygra.findContours(true);
-	TRACE_INFO("Contours size: %u", (unsigned) contoursSize);
-
-	/* Get the biggest contour */
-	int contourIdx = mygra.getContour();
+	vector<vector<Point> > contours;
+	vector<Point> contour;
+	int contourIdx = ct->get(lImgProcessed, contour);
+	ct->getAll(contours);
+	TRACE_INFO("Contours size: %u", (unsigned) contours.size());
 	TRACE_INFO("Select contour: %u", (unsigned)contourIdx);
-
-	vector<Point> *contour = mygra.getContourPtr(contourIdx);
-	TRACE_INFO("Number of points: %u", contour->size());
+	TRACE_INFO("Number of points: %u", contour.size());
 
 	TRACE_INFO("Re factoring contour inside 3.5 * palm radius");
-	for (unsigned i=0; i < contour->size(); i++) {
-		Point p = (*contour)[i];
+	for (unsigned i=0; i < contour.size(); i++) {
+		Point p = contour[i];
 		double d = norm(p - palmCenterLoc);
 		if (d > (palmCenterRadius * 3.5)) {
-			(*contour).erase(contour->begin() + i);
+			contour.erase(contour.begin() + i);
 		}
 	}
-	TRACE_INFO("Number of points: %u", contour->size());
+	TRACE_INFO("Number of points: %u", contour.size());
 
 	/* Maximum enclosing circle */
-	minEnclosingCircle(*contour, maxCircleLoc, maxCircleRadius);
+	minEnclosingCircle(contour, maxCircleLoc, maxCircleRadius);
 	circle(lImgOriginal, maxCircleLoc, 4, Scalar(0, 0, 100), -1, 8, 0);
 	circle(lImgOriginal, maxCircleLoc, (int)maxCircleRadius, Scalar(0, 0, 100), 1, 8, 0);
 
 	/* Find the convex hull */
 	vector<int> convHull;
-	convexHull(*contour, convHull);
+	convexHull(contour, convHull);
 //	drawContours(lImgOriginal, vector<vector<Point> >(1, hull), 0, Scalar(0,100,0), 2, 8);
 
 	vector<Vec4i> defects;
-	convexityDefects(*contour, convHull, defects);
+	convexityDefects(contour, convHull, defects);
 	TRACE_INFO("Convexity Defects size: %u", defects.size());
 
 	for (unsigned i=0; i < defects.size(); i++) {
@@ -538,7 +562,7 @@ void image(void)
 				discarded = true;
 			}
 
-			float da = angleBetween((*contour)[startIdx], (*contour)[endIdx], (*contour)[defectPtIdx]);
+			float da = angleBetween(contour[startIdx], contour[endIdx], contour[defectPtIdx]);
 			printf("Delta A: %f\r\n", (da * 180.0 / CV_PI));
 			if (da > (100 * CV_PI/180)) {
 				TRACE_INFO("Discarded due delta A > 100\r\n");
@@ -550,7 +574,7 @@ void image(void)
 				int selectI = 0;
 				for (int j=-10; j <= 10; j++) {
 
-					int lastIdx = contour->size()-1;
+					int lastIdx = contour.size()-1;
 					int up = startIdx + 15 + j;
 					int down = startIdx - 15 + j;
 					int point = startIdx + j;
@@ -562,7 +586,7 @@ void image(void)
 
 
 					float deltaK;
-					deltaK = angleBetween((*contour)[up], (*contour)[down], (*contour)[point]);
+					deltaK = angleBetween(contour[up], contour[down], contour[point]);
 					TRACE_INFO("Points: %d, %d, %d : deltaK: %f", up, down, point, (deltaK * 180.0/CV_PI));
 
 					if (deltaK < selectK && deltaK >=0) {
@@ -575,20 +599,20 @@ void image(void)
 				if (selectK < (60 * CV_PI / 180.0)) {
 					fingers.push_back(selectI);
 
-					int lastIdx = contour->size()-1;
+					int lastIdx = contour.size()-1;
 					int up = selectI + 15;
 					int down = selectI - 15;
 
 					if (up > lastIdx) up = up - lastIdx;
 					if (down < 0) down = lastIdx + down;
-					line(lImgOriginal, (*contour)[selectI], (*contour)[up], Scalar(10, 255, 10));
-					line(lImgOriginal, (*contour)[selectI], (*contour)[down], Scalar(10, 255, 10));
+					line(lImgOriginal, contour[selectI], contour[up], Scalar(10, 255, 10));
+					line(lImgOriginal, contour[selectI], contour[down], Scalar(10, 255, 10));
 				}
 
 				selectK = 2 * CV_PI;
 				selectI = 0;
 				for (int j=-10; j <= 10; j++) {
-					int lastIdx = contour->size()-1;
+					int lastIdx = contour.size()-1;
 					int up = endIdx + 15 + j;
 					int down = endIdx -15 + j;
 					int point = endIdx + j;
@@ -601,7 +625,7 @@ void image(void)
 					printf("Points: %d, %d, %d", up, down, point);
 
 					float deltaK;
-					deltaK = angleBetween((*contour)[up], (*contour)[down], (*contour)[point]);
+					deltaK = angleBetween(contour[up], contour[down], contour[point]);
 					printf("DeltaK: %f\r\n", (deltaK * 180.0/CV_PI));
 
 					if (deltaK < selectK && deltaK >=0) {
@@ -616,14 +640,13 @@ void image(void)
 				}
 			}
 
-			circle(lImgOriginal, (*contour)[startIdx] , 2, Scalar(0, 100, 0), -1, 8, 0 );
-			circle(lImgOriginal, (*contour)[endIdx] , 2, Scalar(100, 0, 0), -1, 8, 0 );
-			circle(lImgOriginal, (*contour)[defectPtIdx] , 2, Scalar(0, 0, 100), -1, 8, 0 );
+			circle(lImgOriginal, contour[startIdx] , 2, Scalar(0, 100, 0), -1, 8, 0 );
+			circle(lImgOriginal, contour[endIdx] , 2, Scalar(100, 0, 0), -1, 8, 0 );
+			circle(lImgOriginal, contour[defectPtIdx] , 2, Scalar(0, 0, 100), -1, 8, 0 );
 
-			line(lImgOriginal, (*contour)[startIdx], (*contour)[endIdx], lineColor);
-			line(lImgOriginal, (*contour)[endIdx], (*contour)[defectPtIdx], lineColor);
-			line(lImgOriginal, (*contour)[defectPtIdx], (*contour)[startIdx], lineColor);
-
+			line(lImgOriginal, contour[startIdx], contour[endIdx], lineColor);
+			line(lImgOriginal, contour[endIdx], contour[defectPtIdx], lineColor);
+			line(lImgOriginal, contour[defectPtIdx], contour[startIdx], lineColor);
 
 			imshow("Original", lImgOriginal);
 			//cvWaitKey(0);
@@ -635,8 +658,8 @@ void image(void)
 	printf("Fingers: %u\r\n", fingers.size());
 	printf("Re factoring the fingers, eliminate duplicates\r\n");
 	for (unsigned i=1; i < fingers.size(); i++) {
-		Point v1 = (*contour)[fingers[i]];
-		Point v2 = (*contour)[fingers[i-1]];
+		Point v1 = contour[fingers[i]];
+		Point v2 = contour[fingers[i-1]];
 
 		double n = norm(v1 - v2);
 		printf("Norm between %u and %u = %f\r\n", i, (i-1), n);
@@ -651,12 +674,70 @@ void image(void)
 
 	/* Draw the finger points */
 	for (unsigned i=0; i < fingers.size(); i++) {
-		circle(lImgOriginal, (*contour)[fingers[i]] , 4, Scalar(200, 0, 200), -1, 8, 0 );
-		circle(lImgProcessed, (*contour)[fingers[i]] , 4, Scalar(200, 0, 200), -1, 8, 0 );
+		circle(lImgOriginal, contour[fingers[i]] , 4, Scalar(200, 0, 200), -1, 8, 0 );
+		circle(lImgProcessed, contour[fingers[i]] , 4, Scalar(200, 0, 200), -1, 8, 0 );
 
-		Point x = (*contour)[fingers[i]] - palmCenterLoc;
-		x = x + (*contour)[fingers[i]];
+		Point x = contour[fingers[i]] - palmCenterLoc;
+		x = x + contour[fingers[i]];
 		line(lImgOriginal, palmCenterLoc, x, Scalar(50, 50, 250));
+	}
+
+	switch (fingers.size()) {
+	case 1:
+	{
+		Point PalmRef = Point(0, palmCenterLoc.y);
+		Point finger = contour[fingers[0]];
+		float angle = angleBetween(finger, PalmRef, palmCenterLoc);
+		printf("Finger angle: %f degrees\r\n", (angle * 180.0 / CV_PI));
+
+		circle(lImgOriginal, PalmRef , 4, COLOR_BLUE, -1, 8, 0 );
+
+		if (angle > (60.0 * CV_PI/180.0)) {
+			putText(lImgOriginal, "OK", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		} else {
+			putText(lImgOriginal, "Point", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		}
+	}
+		break;
+
+	case 2:
+	{
+		Point finger1 = contour[fingers[0]];
+		Point finger2 = contour[fingers[1]];
+		float angle = angleBetween(finger1, finger2, palmCenterLoc);
+		printf("Finger angle: %f degrees\r\n", (angle * 180.0 / CV_PI));
+
+		if (angle > (45.0 * CV_PI/180.0)) {
+			putText(lImgOriginal, "Gun", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		} else {
+			putText(lImgOriginal, "Number 2", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		}
+	}
+		break;
+
+	case 5:
+		putText(lImgOriginal, "Open Hand", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		break;
+	case 3:
+		putText(lImgOriginal, "Number 3", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		break;
+	case 4:
+		putText(lImgOriginal, "Number 4", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		break;
+
+	case 0:
+	{
+		printf("Radius diff: %f\r\n", (maxCircleRadius - palmCenterRadius));
+		if ((maxCircleRadius - palmCenterRadius) > 80) {
+			putText(lImgOriginal, "Open Palm", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		} else {
+			putText(lImgOriginal, "Close Palm", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		}
+	}
+	break;
+	default:
+		putText(lImgOriginal, "some text", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+		break;
 	}
 
 	pyrUp( lImgOriginal, lImgOriginal, Size( lImgOriginal.cols*2, lImgOriginal.rows*2 ));
@@ -669,14 +750,45 @@ void image(void)
 
 void video(void)
 {
-	//Mat frame;
-	Mat lImgProcessed, lImgTemp;
+	Mat ref, actual, diff;
 	CvCapture *capture = cvCreateFileCapture(gOption.inputFile);
-	//CvMemStorage *storage = cvCreateMemStorage(0);
-	//CvMemStorage* hullStorage = cvCreateMemStorage(0);
 
-	lImgProcessed = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
-	lImgTemp = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
+	//lImgProcessed = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
+	//lImgTemp = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
+
+	{
+		char c;
+
+		/* Get the first frame */
+		actual = cvQueryFrame(capture);
+		if (actual.data == NULL) {
+			printf("Frame error");
+		} else {
+
+			ref = actual.clone();
+			while(1) {
+
+				actual = cvQueryFrame(capture);
+				if (actual.data == NULL) {
+					printf("Frame error");
+					break;
+				}
+
+				absdiff(ref, actual, diff);
+				actual.copyTo(ref);
+
+				imshow("Original", ref);
+				imshow("Processed", actual);
+				imshow("Diff", diff);
+
+				c = cvWaitKey(0);
+				if (c == 27) break;
+			}
+		}
+
+		cvReleaseCapture(&capture);
+		return;
+	}
 
 	globalThreshold *thresh = new otsuThreshold();
 	gra mygra(lImgProcessed, *thresh);
@@ -776,9 +888,31 @@ void video(void)
 void webcam(void)
 {
 	CvCapture *lCapWebCam;
-	//Mat lImgOriginal;
-	//Mat lImgProcessed;
 	char lCheckForEscKey;
+
+	double palmCenterRadius;
+	Point palmCenterLoc;
+	float maxCircleRadius;
+	Point2f maxCircleLoc;
+	vector<int> fingers;
+
+	vector<vector<Point> > contours;
+	vector<Point> contour;
+	double lContourArea = 0;
+	unsigned lCntIdx;
+
+	globalThreshold *th = new meanThreshold();
+	biggestContour *ct = new biggestContour();
+
+	Mat lImgTemp;
+	int morph_elem = 0;
+	int morph_size = 2;
+	int morph_operator = 0;
+	int const max_operator = 4;
+	int const max_elem = 2;
+	int const max_kernel_size = 21;
+	int operation = morph_operator + 2;
+	Mat element = getStructuringElement( morph_elem, Size( 2*morph_size + 1, 2*morph_size+1 ), Point( morph_size, morph_size ) );
 
 	lCapWebCam = cvCaptureFromCAM(0);
 	if (lCapWebCam == NULL) {
@@ -786,104 +920,339 @@ void webcam(void)
 		return;
 	}
 
+	Mat ref, actual, diff;
+
+	//lImgProcessed = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
+	//lImgTemp = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
+
+//	{
+//		char c;
+//
+//		/* Get the first frame */
+//		actual = cvQueryFrame(lCapWebCam);
+//		if (actual.data == NULL) {
+//			printf("Frame error");
+//		} else {
+//
+//			ref = actual.clone();
+//			while(1) {
+//
+//				actual = cvQueryFrame(lCapWebCam);
+//				if (actual.data == NULL) {
+//					printf("Frame error");
+//					break;
+//				}
+//
+//				absdiff(ref, actual, diff);
+//				actual.copyTo(ref);
+//
+//				imshow("Original", ref);
+//				imshow("Processed", actual);
+//				imshow("Diff", diff);
+//
+//				c = cvWaitKey(33);
+//				if (c == 27) break;
+//			}
+//		}
+//
+//		cvReleaseCapture(&lCapWebCam);
+//		return;
+//	}
+
 	lImgProcessed = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 1);
 
+	Mat fgMaskMOG2;
+	Ptr<BackgroundSubtractor> pMOG2; //MOG2 Background subtractor
+	pMOG2 = new BackgroundSubtractorMOG2(); //MOG2 approach
+
 	while(1) {
+
 		lImgOriginal = cvQueryFrame(lCapWebCam);
-
-
 		if (lImgOriginal.data == NULL) {
 			printf("Error: frame is NULL\n");
 			break;
 		}
 
-#if 0
-		{
-			printf("Channel: %d, %d\r\n", lImgOriginal->alphaChannel, lImgProcessed->alphaChannel);
-			printf("Width: %d, %d\r\n", lImgOriginal->width, lImgProcessed->width);
-			printf("Depth: %d, %d\r\n", lImgOriginal->depth, lImgProcessed->depth);
-		}
-#endif
+		//lImgOriginal.copyTo(fgMaskMOG2);
 
-		/* Applying OTSU threshold */
+		/* It is necessary to convert to gray scale before apply the filter */
+		cvtColor(lImgOriginal, lImgProcessed, CV_BGR2GRAY);
 
-		{
-			cvtColor(lImgOriginal, lImgProcessed, CV_BGR2GRAY);
-			double t = mygra.threshold();
-			//TRACE_INFO("Global threshold: %u", (unsigned) t);
+		try {
+			lImgProcessed.copyTo(fgMaskMOG2);
 
-			Mat imgDistance;
-			distanceTransform(lImgProcessed, imgDistance, CV_DIST_L2, CV_DIST_MASK_PRECISE);
-			double maxVal, minVal;
-			Point minLoc, maxLoc;
+			//equalizeHist(lImgProcessed, fgMaskMOG2);
+			blur(lImgProcessed, fgMaskMOG2, Size(3,3));
+			Canny(fgMaskMOG2, fgMaskMOG2, 10, 30, 3);
 
-			minMaxLoc(imgDistance, &minVal, &maxVal, &minLoc, &maxLoc);
-			//TRACE_INFO("Max value: %u: x=%u, y=%u", (int)maxVal, maxLoc.x, maxLoc.y);
+			//th->apply(lImgProcessed, lImgProcessed);
+			morphologyEx(fgMaskMOG2, lImgProcessed, 3, element);
+			//morphologyEx(lImgProcessed, lImgOriginal, 2, element);
 
-			circle(lImgOriginal, maxLoc, 4, Scalar(100, 0, 255), -1, 8, 0);
-			circle(lImgOriginal, maxLoc, (int)maxVal, Scalar(100, 0, 255), 1, 8, 0);
-			circle(lImgOriginal, maxLoc, (int)(3.5 * maxVal), Scalar(100, 0, 255), 1, 8, 0);
-//
-//			size_t contoursSize = mygra.findContours(true);
-//			//TRACE_INFO("Contours size: %u", (unsigned) contoursSize);
-//
-//			int co = mygra.getContour();
-//			//TRACE_INFO("Select contour: %u", (unsigned)co);
-//
-//			vector<Point> *p = mygra.getContourPtr(co);
-//			//TRACE_INFO("Number of points: %u", (*p).size());
-//
-//			Point2f center;
-//			float radius;
-//			minEnclosingCircle(InputArray(*p), center, radius);
-//
-//			circle(lImgOriginal, center, 4, Scalar(0, 0, 100), -1, 8, 0);
-//			circle(lImgOriginal, center, (int)radius, Scalar(0, 0, 100), 1, 8, 0);
-//
-//			if ((*p).size() > 20) {
-//				vector<int> hull;
-//				convexHull(InputArray(*p), hull);
-//				//drawContours(lImgOriginal, vector<vector<Point> >(1, hull), 0, Scalar(0,100,0), 2, 8);
-//
-//				vector<Vec4i> defects;
-//				convexityDefects(*p, hull, defects);
-//				//TRACE_INFO("Convexity Defects size: %u", defects.size());
-//
-//				for(unsigned i=0; i < defects.size(); i++) {
-//					Vec4i s = defects[i];
-//
-//					int startIdx = s.val[0];
-//
-//					int endIdx = s.val[1];
-//
-//					int defectPtIdx = s.val[2];
-//
-//					double depth = static_cast<double>(s.val[3]) / 256.0;
-//
-//					//std::cout << startIdx << ' ' << endIdx << ' ' << defectPtIdx << ' ' << depth << '\n' << '\n' << std::endl;
-//
-//					//Point2f p(defectPtIdx, defectPtIdx);
-//					if (depth > 5) {
-//						circle(lImgOriginal, (*p)[startIdx] , 4, Scalar(0, 100, 0), -1, 8, 0 );
-//						circle(lImgOriginal, (*p)[endIdx] , 4, Scalar(0, 0, 100), -1, 8, 0 );
-//						circle(lImgOriginal, (*p)[defectPtIdx] , 4, Scalar(100, 0, 0), -1, 8, 0 );
-//
-//						line(lImgOriginal, (*p)[startIdx], (*p)[endIdx], Scalar(0, 100, 0));
-//						line(lImgOriginal, (*p)[endIdx], (*p)[defectPtIdx], Scalar(0, 100, 0));
-//						line(lImgOriginal, (*p)[defectPtIdx], (*p)[startIdx], Scalar(0, 100, 0));
-//					}
-//
-//				}
-//			}
+
+			//morphologyEx(lImgProcessed, lImgProcessed, operation, element);
+			//lImgProcessed.copyTo(lImgTemp);
+			//pMOG2->operator()(lImgOriginal, fgMaskMOG2, 0);
+
+			/* Find the contours */
+			lCntIdx = ct->get(lImgProcessed, contour);
+			ct->getAll(contours);
+			lContourArea = contourArea(contour);
+
+			RNG rng(12345);
+			Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255));
+			drawContours(lImgProcessed, contours, lCntIdx, color, 2, 8);
+			throw 10;
+
+			/* Find the palm center */
+			palmCenter(lImgProcessed, palmCenterLoc, palmCenterRadius);
+			palmDraw(lImgOriginal, palmCenterLoc, palmCenterRadius);
+			palmValidation(palmCenterRadius);
+
+
+			/* Find the contours */
+//			lCntIdx = ct->get(lImgTemp, contour);
+//			ct->getAll(contours);
+//			lContourArea = contourArea(contour);
+//			contourAreaValidation(lContourArea);
+
+		} catch (int n) {
+			printf("%d\r\n", (unsigned)n);
 
 			imshow("Original", lImgOriginal);
 			imshow("Processed", lImgProcessed);
+			imshow("MOG2", fgMaskMOG2);
+
+			lCheckForEscKey = cvWaitKey(10);
+			if (lCheckForEscKey == 27) {
+				break;
+			}
+
+			continue;
+		}
+
+		for (unsigned i=0; i < contour.size(); i++) {
+			Point p = contour[i];
+			double d = norm(p - palmCenterLoc);
+			if (d > (palmCenterRadius * 3.5)) {
+				contour.erase(contour.begin() + i);
+			}
+		}
+
+		/* Maximum enclosing circle */
+		minEnclosingCircle(contour, maxCircleLoc, maxCircleRadius);
+		circle(lImgOriginal, maxCircleLoc, 4, Scalar(0, 0, 100), -1, 8, 0);
+		circle(lImgOriginal, maxCircleLoc, (int)maxCircleRadius, Scalar(0, 0, 100), 1, 8, 0);
+
+		/* Find the convex hull */
+		vector<int> convHull;
+		convexHull(contour, convHull);
+
+		vector<Vec4i> defects;
+		convexityDefects(contour, convHull, defects);
+
+		for (unsigned i=0; i < defects.size(); i++) {
+
+			Vec4i s = defects[i];
+			int startIdx = s.val[0];
+			int endIdx = s.val[1];
+			int defectPtIdx = s.val[2];
+			double depth = static_cast<double>(s.val[3]) / 256.0;
+			Scalar lineColor = Scalar(0, 100, 0);
+
+			if (depth > 5) {
+				bool discarded = false;
+
+				if (depth < (palmCenterRadius / 3)) {
+					lineColor = COLOR_RED;
+					discarded = true;
+				}
+
+				float da = angleBetween(contour[startIdx], contour[endIdx], contour[defectPtIdx]);
+				if (da > (100 * CV_PI/180)) {
+					lineColor = COLOR_BLUE;
+					discarded = true;
+				}
+
+				if (discarded == false) {
+					float selectK = 2 * CV_PI;
+					int selectI = 0;
+					for (int j=-10; j <= 10; j++) {
+
+						int lastIdx = contour.size()-1;
+						int up = startIdx + 30 + j;
+						int down = startIdx - 30 + j;
+						int point = startIdx + j;
+
+						if (up > lastIdx) up = up - lastIdx;
+						if (down < 0) down = lastIdx + down;
+						if (point < 0) point = lastIdx + point;
+						if (point > lastIdx) point = point - lastIdx;
+
+
+						float deltaK;
+						deltaK = angleBetween(contour[up], contour[down], contour[point]);
+						//TRACE_INFO("Points: %d, %d, %d : deltaK: %f", up, down, point, (deltaK * 180.0/CV_PI));
+
+						if (deltaK < selectK && deltaK >=0) {
+							selectK = deltaK;
+							selectI = point;
+						}
+					}
+
+					//printf("Selected point: %d\r\n", selectI);
+					if (selectK < (60 * CV_PI / 180.0)) {
+						fingers.push_back(selectI);
+
+						int lastIdx = contour.size()-1;
+						int up = selectI + 30;
+						int down = selectI - 30;
+
+						if (up > lastIdx) up = up - lastIdx;
+						if (down < 0) down = lastIdx + down;
+						line(lImgOriginal, contour[selectI], contour[up], Scalar(10, 255, 10));
+						line(lImgOriginal, contour[selectI], contour[down], Scalar(10, 255, 10));
+					}
+
+					selectK = 2 * CV_PI;
+					selectI = 0;
+					for (int j=-10; j <= 10; j++) {
+						int lastIdx = contour.size()-1;
+						int up = endIdx + 15 + j;
+						int down = endIdx -15 + j;
+						int point = endIdx + j;
+
+						if (up > lastIdx) up = up - lastIdx;
+						if (down < 0) down = lastIdx + down;
+						if (point < 0) point = lastIdx + point;
+						if (point > lastIdx) point = point - lastIdx;
+
+						//printf("Points: %d, %d, %d", up, down, point);
+
+						float deltaK;
+						deltaK = angleBetween(contour[up], contour[down], contour[point]);
+						//printf("DeltaK: %f\r\n", (deltaK * 180.0/CV_PI));
+
+						if (deltaK < selectK && deltaK >=0) {
+							selectK = deltaK;
+							selectI = point;
+						}
+					}
+
+					//printf("Selected point: %d\r\n", selectI);
+					if (selectK < (60 * CV_PI / 180.0)) {
+						fingers.push_back(selectI);
+					}
+				}
+
+				circle(lImgOriginal, contour[startIdx] , 2, Scalar(0, 100, 0), -1, 8, 0 );
+				circle(lImgOriginal, contour[endIdx] , 2, Scalar(100, 0, 0), -1, 8, 0 );
+				circle(lImgOriginal, contour[defectPtIdx] , 2, Scalar(0, 0, 100), -1, 8, 0 );
+
+				line(lImgOriginal, contour[startIdx], contour[endIdx], lineColor);
+				line(lImgOriginal, contour[endIdx], contour[defectPtIdx], lineColor);
+				line(lImgOriginal, contour[defectPtIdx], contour[startIdx], lineColor);
+
+			}
+
+		}
+
+		for (unsigned i=1; i < fingers.size(); i++) {
+			Point v1 = contour[fingers[i]];
+			Point v2 = contour[fingers[i-1]];
+
+			double n = norm(v1 - v2);
+			//printf("Norm between %u and %u = %f\r\n", i, (i-1), n);
+
+			if (n < 5) {
+				//printf("Eliminate %u\r\n", i);
+				fingers.erase(fingers.begin() + i);
+				i--;
+			}
+		}
+		//printf("Fingers: %u\r\n", fingers.size());
+
+		/* Draw the finger points */
+		if (fingers.size() <= 5) {
+			for (unsigned i=0; i < fingers.size(); i++) {
+
+				circle(lImgOriginal, contour[fingers[i]] , 4, Scalar(200, 0, 200), -1, 8, 0 );
+				circle(lImgProcessed, contour[fingers[i]] , 4, Scalar(200, 0, 200), -1, 8, 0 );
+
+				Point x = contour[fingers[i]] - palmCenterLoc;
+				x = x + contour[fingers[i]];
+				line(lImgOriginal, palmCenterLoc, x, Scalar(50, 50, 250));
+			}
+		}
+
+		switch (fingers.size()) {
+		case 1:
+		{
+			Point PalmRef = Point(0, palmCenterLoc.y);
+			Point finger = contour[fingers[0]];
+			float angle = angleBetween(finger, PalmRef, palmCenterLoc);
+			//printf("Finger angle: %f degrees\r\n", (angle * 180.0 / CV_PI));
+
+			circle(lImgOriginal, PalmRef , 4, COLOR_BLUE, -1, 8, 0 );
+
+			if (angle > (60.0 * CV_PI/180.0)) {
+				putText(lImgOriginal, "OK", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			} else {
+				putText(lImgOriginal, "Point", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			}
+		}
+			break;
+
+		case 2:
+		{
+			Point finger1 = contour[fingers[0]];
+			Point finger2 = contour[fingers[1]];
+			float angle = angleBetween(finger1, finger2, palmCenterLoc);
+			//printf("Finger angle: %f degrees\r\n", (angle * 180.0 / CV_PI));
+
+			if (angle > (45.0 * CV_PI/180.0)) {
+				putText(lImgOriginal, "Gun", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			} else {
+				putText(lImgOriginal, "Number 2", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			}
+		}
+			break;
+
+		case 5:
+			putText(lImgOriginal, "Open Hand", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			break;
+		case 3:
+			putText(lImgOriginal, "Number 3", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			break;
+		case 4:
+			putText(lImgOriginal, "Number 4", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			break;
+
+		case 0:
+		{
+			//printf("Radius diff: %f\r\n", (maxCircleRadius - palmCenterRadius));
+			if ((maxCircleRadius - palmCenterRadius) > 80) {
+				putText(lImgOriginal, "Open Palm", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			} else {
+				putText(lImgOriginal, "Close Palm", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			}
+		}
+		break;
+		default:
+			putText(lImgOriginal, "some text", Point(25,25), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255), 2, 8, false);
+			break;
+		}
+
+		//pyrUp( lImgOriginal, lImgOriginal, Size( lImgOriginal.cols*2, lImgOriginal.rows*2 ));
+		imshow("Original", lImgOriginal);
+		imshow("Processed", lImgProcessed);
+		imshow("MOG2", fgMaskMOG2);
+		fingers.clear();
 
 		lCheckForEscKey = cvWaitKey(10);
 		if (lCheckForEscKey == 27) {
 			break;
 		}
-	}
 	}
 
 	/* Do not forget to release the camera, otherwise the program does not exit */
@@ -892,12 +1261,16 @@ void webcam(void)
 
 #include <math.h>
 void globalThresholdTest(void);
+void contoursTest(void);
 
 int main(int argc, char **argv)
 {
 	setbuf(stdout, NULL);
-	globalThresholdTest();
-	return 0;
+
+	//globalThresholdTest();
+	//return 0;
+	//contoursTest();
+	//return 0;
 
 	/* Process the command options */
 	if (options(argc, argv) < 0) {
@@ -905,6 +1278,55 @@ int main(int argc, char **argv)
 		return (-1);
 	}
 
+	{
+		namedWindow("Original", CV_WINDOW_AUTOSIZE);
+		namedWindow("MOG2", CV_WINDOW_AUTOSIZE);
+		namedWindow("Background", CV_WINDOW_AUTOSIZE);
+
+		CvCapture *lCapWebCam;
+		Mat lImgMog2, lImgBack;
+		Ptr<BackgroundSubtractor> lMog2;
+		int morph_elem = 0;
+		int morph_size = 2;
+		int morph_operator = 0;
+		int const max_operator = 4;
+		int const max_elem = 2;
+		int const max_kernel_size = 21;
+		int operation = morph_operator + 2;
+		Mat element = getStructuringElement( morph_elem, Size( 2*morph_size + 1, 2*morph_size+1 ), Point( morph_size, morph_size ) );
+
+		lMog2 = new BackgroundSubtractorMOG2();
+
+		//lCapWebCam = cvCaptureFromCAM(0);
+		lCapWebCam = cvCreateFileCapture(gOption.inputFile);
+		if (lCapWebCam == NULL) {
+			printf("Error: camera capture is NULL\r\n");
+			return 0;
+		}
+
+		while(1) {
+			lImgOriginal = cvQueryFrame(lCapWebCam);
+			if (lImgOriginal.data == NULL) {
+				printf("Error: frame is NULL\n");
+				break;
+			}
+
+			lMog2->operator()(lImgOriginal, lImgMog2, 0.01);
+			lMog2->getBackgroundImage(lImgBack);
+
+			//morphologyEx(lImgMog2, lImgMog2, 1, element);
+			//Canny(lImgMog2, lImgMog2, 10, 30, 3);
+
+			imshow("Original", lImgOriginal);
+			imshow("MOG2", lImgMog2);
+			imshow("Background", lImgBack);
+			char c = cvWaitKey(30);
+			if (c == 27) {
+				cvReleaseCapture(&lCapWebCam);
+				return 0;
+			}
+		}
+	}
 	//Mat M(300, 300, CV_8UC1, 255);
 	//Mat D(300, 300, CV_8UC1, 255);
 //	Mat M = imread("01.jpg", CV_LOAD_IMAGE_GRAYSCALE);
@@ -971,6 +1393,7 @@ int main(int argc, char **argv)
 	/* Create windows */
 	namedWindow("Original", CV_WINDOW_AUTOSIZE);
 	namedWindow("Processed", CV_WINDOW_AUTOSIZE);
+	namedWindow("MOG2", CV_WINDOW_AUTOSIZE);
 
 	switch(gOption.input) {
 	case INPUT_WEBCAM:
