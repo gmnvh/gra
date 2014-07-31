@@ -1,4 +1,9 @@
 \select@language {brazilian}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Kinect, da Microsoft, e a c\IeC {\^a}mera da \textit {Creative} com parceria da Intel}}{4}{figure.1.1}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Kinect, da Microsoft, e a c\IeC {\^a}mera da \textit {Creative} com parceria da Intel\relax }}{4}{figure.caption.4}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Exemplo de m\IeC {\'a}scara 3x3\relax }}{9}{figure.caption.5}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Gradientes\relax }}{10}{figure.caption.7}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Webcam utilizada na aquisi\IeC {\c c}\IeC {\~a}o das imagens sem nenhuma modifica\IeC {\c c}\IeC {\~a}o\relax }}{12}{figure.caption.9}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Lentes com o filtro infra vermelho localizado na parte traseira\relax }}{13}{figure.caption.10}

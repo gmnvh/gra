@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.8.27)  22 JUL 2014 15:25
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.8.27)  31 JUL 2014 18:45
 entering extended mode
 **main.tex
 (D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\main.tex
@@ -516,34 +516,74 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 )
-(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen127
+\captionmargin@=\dimen128
+\captionwidth=\dimen129
+\caption@tempdima=\dimen130
+\caption@indent=\dimen131
+\caption@parindent=\dimen132
+\caption@hangindent=\dimen133
+)
+\c@ContinuedFloat=\count115
+Package caption Info: hyperref package is loaded.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
+\c@subfigure=\count116
+\c@subtable=\count117
+)
+(D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.aux
+
+LaTeX Warning: Label `fig:gradiente_gx' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig:gradiente_gx' multiply defined.
+
+
+LaTeX Warning: Label `fig:gradiente_gy' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig:gradiente_gy' multiply defined.
+
+
+LaTeX Warning: Label `fig:gradiente_gmag' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig:gradiente_gmag' multiply defined.
+
+)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
+LaTeX Font Info:    ... okay on input line 23.
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count115
-\scratchdimen=\dimen127
+\scratchcounter=\count118
+\scratchdimen=\dimen134
 \scratchbox=\box28
-\nofMPsegments=\count116
-\nofMParguments=\count117
+\nofMPsegments=\count119
+\nofMParguments=\count120
 \everyMPshowfont=\toks23
-\MPscratchCnt=\count118
-\MPscratchDim=\dimen128
-\MPnumerator=\count119
-\makeMPintoPDFobject=\count120
+\MPscratchCnt=\count121
+\MPscratchDim=\dimen135
+\MPnumerator=\count122
+\makeMPintoPDFobject=\count123
 \everyMPtoPDFconversion=\toks24
 )
 *geometry* driver: auto-detecting
@@ -581,28 +621,30 @@ LaTeX Font Info:    ... okay on input line 20.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \AtBeginShipoutBox=\box29
-Package hyperref Info: Link coloring OFF on input line 20.
+Package hyperref Info: Link coloring OFF on input line 23.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count121
+\c@section@level=\count124
 )
-LaTeX Info: Redefining \ref on input line 20.
-LaTeX Info: Redefining \pageref on input line 20.
-LaTeX Info: Redefining \nameref on input line 20.
+LaTeX Info: Redefining \ref on input line 23.
+LaTeX Info: Redefining \pageref on input line 23.
+LaTeX Info: Redefining \nameref on input line 23.
 
 (D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.out)
 (D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.out)
 \@outlinefile=\write3
-LaTeX Font Info:    Try loading font information for U+msa on input line 27.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Try loading font information for U+msa on input line 30.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 27.
+LaTeX Font Info:    Try loading font information for U+msb on input line 30.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -616,7 +658,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.28 \listoftables
+l.31 \listoftables
                    		% Lista de tabelas [1
 
 ]
@@ -632,14 +674,14 @@ l.28 \listoftables
 
 ]
 Cap\'{\i }tulo 1.
-<image/kinect_camera.png, id=110, 295.1025pt x 152.06813pt>
+<image/kinect_camera.png, id=135, 295.1025pt x 152.06813pt>
 File: image/kinect_camera.png Graphic file (type png)
 
 <use image/kinect_camera.png>
 Package pdftex.def Info: image/kinect_camera.png used on input line 12.
 (pdftex.def)             Requested size: 145.11053pt x 74.77623pt.
 
-<image/intel_creative_camera.jpg, id=111, 446.66875pt x 251.94125pt>
+<image/intel_creative_camera.jpg, id=136, 446.66875pt x 251.94125pt>
 File: image/intel_creative_camera.jpg Graphic file (type jpg)
 
 <use image/intel_creative_camera.jpg>
@@ -661,51 +703,156 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\chapter.referencial.teorico.tex
 [7]
 Cap\'{\i }tulo 2.
+[8
+
+] <image/gradiente_original.jpg, id=212, 321.2pt x 240.9pt>
+File: image/gradiente_original.jpg Graphic file (type jpg)
+
+<use image/gradiente_original.jpg>
+Package pdftex.def Info: image/gradiente_original.jpg used on input line 110.
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
+<image/gradiente_prewitt_gx.jpg, id=213, 321.2pt x 240.9pt>
+File: image/gradiente_prewitt_gx.jpg Graphic file (type jpg)
+
+<use image/gradiente_prewitt_gx.jpg>
+Package pdftex.def Info: image/gradiente_prewitt_gx.jpg used on input line 117.
+
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
+<image/gradiente_prewitt_gy.jpg, id=214, 321.2pt x 240.9pt>
+File: image/gradiente_prewitt_gy.jpg Graphic file (type jpg)
+
+<use image/gradiente_prewitt_gy.jpg>
+Package pdftex.def Info: image/gradiente_prewitt_gy.jpg used on input line 124.
+
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
+<image/gradiente_prewitt_mag.jpg, id=215, 321.2pt x 240.9pt>
+File: image/gradiente_prewitt_mag.jpg Graphic file (type jpg)
+
+<use image/gradiente_prewitt_mag.jpg>
+Package pdftex.def Info: image/gradiente_prewitt_mag.jpg used on input line 129
+.
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
+<image/gradiente_sobel_gx.jpg, id=216, 321.2pt x 240.9pt>
+File: image/gradiente_sobel_gx.jpg Graphic file (type jpg)
+
+<use image/gradiente_sobel_gx.jpg>
+Package pdftex.def Info: image/gradiente_sobel_gx.jpg used on input line 136.
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
+<image/gradiente_sobel_gy.jpg, id=217, 321.2pt x 240.9pt>
+File: image/gradiente_sobel_gy.jpg Graphic file (type jpg)
+
+<use image/gradiente_sobel_gy.jpg>
+Package pdftex.def Info: image/gradiente_sobel_gy.jpg used on input line 143.
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
+<image/gradiente_sobel_mag.jpg, id=218, 321.2pt x 240.9pt>
+File: image/gradiente_sobel_mag.jpg Graphic file (type jpg)
+
+<use image/gradiente_sobel_mag.jpg>
+Package pdftex.def Info: image/gradiente_sobel_mag.jpg used on input line 148.
+(pdftex.def)             Requested size: 145.11053pt x 108.83406pt.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[8
+[9] [10 <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_origina
+l.jpg> <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_prewitt_
+gx.jpg> <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_prewitt
+_gy.jpg> <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_prewit
+t_mag.jpg> <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_sobe
+l_gx.jpg> <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_sobel
+_gy.jpg> <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/gradiente_sobel_
+mag.jpg>] [11]
+Cap\'{\i }tulo 3.
+<image/webcam01.jpg, id=236, 422.57875pt x 524.96124pt>
+File: image/webcam01.jpg Graphic file (type jpg)
 
-]) [9] [10
+<use image/webcam01.jpg>
+Package pdftex.def Info: image/webcam01.jpg used on input line 261.
+(pdftex.def)             Requested size: 145.11053pt x 180.27074pt.
+ <image/webcam02.jpg, id=237, 805.0075pt x 590.205pt>
+File: image/webcam02.jpg Graphic file (type jpg)
+
+<use image/webcam02.jpg>
+Package pdftex.def Info: image/webcam02.jpg used on input line 261.
+(pdftex.def)             Requested size: 145.11053pt x 106.3854pt.
+
+
+LaTeX Warning: Reference `fig:camera_02' on page 12 undefined on input line 268
+.
+
+<image/webcam03.jpg, id=239, 333.245pt x 233.87375pt>
+File: image/webcam03.jpg Graphic file (type jpg)
+ <use image/webcam03.jpg>
+Package pdftex.def Info: image/webcam03.jpg used on input line 274.
+(pdftex.def)             Requested size: 145.11053pt x 101.84131pt.
+
+<image/webcam05.jpg, id=240, 305.14pt x 282.05376pt>
+File: image/webcam05.jpg Graphic file (type jpg)
+ <use image/webcam05.jpg>
+Package pdftex.def Info: image/webcam05.jpg used on input line 274.
+(pdftex.def)             Requested size: 145.11053pt x 134.13615pt.
+)
+[12
+
+ <D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/image/webcam01.jpg> <D:/Gustav
+o/Pessoal/Mestrado/FEI/Tese/rep/latex/image/webcam02.jpg>] [13 <D:/Gustavo/Pess
+oal/Mestrado/FEI/Tese/rep/latex/image/webcam03.jpg> <D:/Gustavo/Pessoal/Mestrad
+o/FEI/Tese/rep/latex/image/webcam05.jpg>] [14
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 133.
- [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 133.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 136.
+ [15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 136.
 
 (D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\output\main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 133.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 133.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 136.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 136.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: F3075178A63332904AB6814F84CD85D7;1007.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 133.
+(rerunfilecheck)             Checksum: 53F8970B1A6C50EEBC605D3F58AAFCB6;1192.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 136.
  ) 
 Here is how much of TeX's memory you used:
- 6998 strings out of 493921
- 99763 string characters out of 3144882
- 194629 words of memory out of 3000000
- 10130 multiletter control sequences out of 15000+200000
- 13263 words of font info for 49 fonts, out of 3000000 for 9000
+ 8156 strings out of 493921
+ 121346 string characters out of 3144882
+ 221801 words of memory out of 3000000
+ 11250 multiletter control sequences out of 15000+200000
+ 13884 words of font info for 51 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 29i,13n,31p,1032b,459s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pr
-ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x8
-6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+ 36i,13n,38p,1032b,524s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{figure.caption.11} has been referenced but does n
+ot exist, replaced by a fixed one
+
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/
+Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pr
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Prog
+ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program
+ Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files
+ (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x
+86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmti10.pfb>
 Output written on D:/Gustavo/Pessoal/Mestrado/FEI/Tese/rep/latex/output/main.pd
-f (12 pages, 294976 bytes).
+f (16 pages, 700377 bytes).
 PDF statistics:
- 256 PDF objects out of 1000 (max. 8388607)
- 52 named destinations out of 1000 (max. 500000)
- 131 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 323 PDF objects out of 1000 (max. 8388607)
+ 69 named destinations out of 1000 (max. 500000)
+ 210 words of extra memory for PDF output out of 10000 (max. 10000000)
 

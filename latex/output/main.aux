@@ -29,8 +29,9 @@
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {1.1}Apresenta\IeC {\c c}\IeC {\~a}o}{4}{section.1.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Kinect, da Microsoft, e a c\IeC {\^a}mera da \textit  {Creative} com parceria da Intel}}{4}{figure.1.1}}
-\newlabel{fig:depth_camera}{{1.1}{4}{Kinect, da Microsoft, e a câmera da \textit {Creative} com parceria da Intel}{figure.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Kinect, da Microsoft, e a c\IeC {\^a}mera da \textit  {Creative} com parceria da Intel\relax }}{4}{figure.caption.4}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:depth_camera}{{1.1}{4}{Kinect, da Microsoft, e a câmera da \textit {Creative} com parceria da Intel\relax }{figure.caption.4}{}}
 \citation{ref12}
 \citation{ref13}
 \citation{ref14}
@@ -56,20 +57,52 @@
 \citation{ref4}
 \@writefile{toc}{\contentsline {section}{\numberline {1.5}Metodologia}{7}{section.1.5}}
 \@writefile{toc}{\contentsline {section}{\numberline {1.6}Organiza\IeC {\c c}\IeC {\~a}o da disserta\IeC {\c c}\IeC {\~a}o}{7}{section.1.6}}
-\citation{dalal}
-\citation{ref16}
 \@writefile{toc}{\contentsline {chapter}{\numberline {2}Referencial Te\IeC {\'o}rico}{8}{chapter.2}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {2.1}Histograma}{8}{section.2.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2.2}Gradientes}{8}{section.2.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}Histograma orientado a gradientes}{8}{section.2.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}Normaliza\IeC {\c c}\IeC {\~a}o Gamma/Cor}{8}{subsection.2.3.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}Gradientes}{8}{subsection.2.3.2}}
-\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Par\IeC {\^a}metros do HOG otimizado por Dalal}}{9}{table.2.1}}
-\newlabel{table:dlal_hog}{{2.1}{9}{Parâmetros do HOG otimizado por Dalal}{table.2.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}Classifica\IeC {\c c}\IeC {\~a}o dos \IeC {\^a}ngulos}{9}{subsection.2.3.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.4}Normaliza\IeC {\c c}\IeC {\~a}o em blocos}{9}{subsection.2.3.4}}
+\newlabel{eq:gradiente_mascara}{{2.4}{8}{Gradientes}{equation.2.2.4}{}}
+\citation{dalal}
+\citation{ref16}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Exemplo de m\IeC {\'a}scara 3x3\relax }}{9}{figure.caption.5}}
+\newlabel{fig:gradiente_mascara}{{2.1}{9}{Exemplo de máscara 3x3\relax }{figure.caption.5}{}}
+\newlabel{fig:gradiente_prewitt}{{2.2a}{9}{Máscara Prewitt\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:gradiente_prewitt}{{a}{9}{Máscara Prewitt\relax }{figure.caption.6}{}}
+\newlabel{fig:gradiente_sobel}{{2.2b}{9}{Máscara Sobel\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:gradiente_sobel}{{b}{9}{Máscara Sobel\relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Norma}{9}{section.2.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Histograma orientado a gradientes}{9}{section.2.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Normaliza\IeC {\c c}\IeC {\~a}o Gamma/Cor}{9}{subsection.2.4.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.2}Gradientes}{9}{subsection.2.4.2}}
+\newlabel{fig:gradiente_original}{{2.3a}{10}{Original\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_original}{{a}{10}{Original\relax }{figure.caption.7}{}}
+\newlabel{fig:gradiente_gx}{{2.3b}{10}{Prewitt Gx\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_gx}{{b}{10}{Prewitt Gx\relax }{figure.caption.7}{}}
+\newlabel{fig:gradiente_gy}{{2.3c}{10}{Prewitt Gy\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_gy}{{c}{10}{Prewitt Gy\relax }{figure.caption.7}{}}
+\newlabel{fig:gradiente_gmag}{{2.3d}{10}{Prewitt Gmag\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_gmag}{{d}{10}{Prewitt Gmag\relax }{figure.caption.7}{}}
+\newlabel{fig:gradiente_gx}{{2.3e}{10}{Sobel Gx\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_gx}{{e}{10}{Sobel Gx\relax }{figure.caption.7}{}}
+\newlabel{fig:gradiente_gy}{{2.3f}{10}{Sobel Gy\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_gy}{{f}{10}{Sobel Gy\relax }{figure.caption.7}{}}
+\newlabel{fig:gradiente_gmag}{{2.3g}{10}{Sobel Gmag\relax }{figure.caption.7}{}}
+\newlabel{sub@fig:gradiente_gmag}{{g}{10}{Sobel Gmag\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Gradientes\relax }}{10}{figure.caption.7}}
+\newlabel{fig:gradientes}{{2.3}{10}{Gradientes\relax }{figure.caption.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Par\IeC {\^a}metros do HOG otimizado por Dalal\relax }}{11}{table.caption.8}}
+\newlabel{table:dlal_hog}{{2.1}{11}{Parâmetros do HOG otimizado por Dalal\relax }{table.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.3}Classifica\IeC {\c c}\IeC {\~a}o dos \IeC {\^a}ngulos}{11}{subsection.2.4.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.4}Normaliza\IeC {\c c}\IeC {\~a}o em blocos}{11}{subsection.2.4.4}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}XXX}{12}{chapter.3}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Constru\IeC {\c c}\IeC {\~a}o da c\IeC {\^a}mera infra vermelha}{12}{section.3.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Webcam utilizada na aquisi\IeC {\c c}\IeC {\~a}o das imagens sem nenhuma modifica\IeC {\c c}\IeC {\~a}o\relax }}{12}{figure.caption.9}}
+\newlabel{fig:camera_01}{{3.1}{12}{Webcam utilizada na aquisição das imagens sem nenhuma modificação\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Lentes com o filtro infra vermelho localizado na parte traseira\relax }}{13}{figure.caption.10}}
+\newlabel{fig:camera_02}{{3.2}{13}{Lentes com o filtro infra vermelho localizado na parte traseira\relax }{figure.caption.10}{}}
 \bibcite{ref1}{1}
 \bibcite{ref2}{2}
 \bibcite{ref3}{3}
