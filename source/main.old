@@ -28,7 +28,7 @@ int options(int argc, char **argv)
 	int lRsp = 0;
 	int lOpt;
 
-	while ((lOpt = getopt(argc, argv, "diwep:v:")) != -1) {
+	while ((lOpt = getopt(argc, argv, "diwep:v:a:")) != -1) {
 		switch (lOpt) {
 		case 'd':
 			/* Configure trace level for debug */
@@ -60,6 +60,11 @@ int options(int argc, char **argv)
 			/* Configure input as video */
 			gOption.input = INPUT_VIDEO;
 			gOption.inputFile = optarg;
+			lRsp = 0;
+			break;
+		case 'a':
+			/* Configure application */
+			gOption.app = optarg;
 			lRsp = 0;
 			break;
 		case '?':
@@ -285,25 +290,19 @@ int main(int argc, char **argv)
 
 	/* Welcome message */
 	TRACE_DEBUG("The GRA Project");
-	TRACE_DEBUG("Input type: %d, %s", gOption.input, gOption.inputFile);
+	TRACE_DEBUG("Input type: %c, %d, %s", gOption.app, gOption.input, gOption.inputFile);
 
-//	/* Create windows */
-//	cvNamedWindow("Original", CV_WINDOW_AUTOSIZE);
-//	cvNamedWindow("Processed", CV_WINDOW_AUTOSIZE);
-//
-//	switch(gOption.input) {
-//	case INPUT_WEBCAM:
-//		webcam();
-//		break;
-//	case INPUT_PHOTO:
-//		image();
-//		break;
-//	case INPUT_VIDEO:
-//		video();
-//		break;
-//	}
-//
-//	cvDestroyWindow("Original");
-//	cvDestroyWindow("Processed");
+	switch(gOption.input) {
+	case INPUT_WEBCAM:
+		webcam();
+		break;
+	case INPUT_PHOTO:
+		image();
+		break;
+	case INPUT_VIDEO:
+		video();
+		break;
+	}
+
 	return 0;
 }

@@ -1,9 +1,9 @@
-path = 'd:\Gustavo\Pessoal\Mestrado\FEI\Tese\photos\hand_pose_ir_ref\ir_led_1\';
-filename = '0_03.jpg';
+path = 'd:\Gustavo\Pessoal\Mestrado\FEI\Tese\photos\hand_pose_ir_ref\night\focus\gustavo\blackshirt\';
+filename = '02.jpg';
 
 save_path = 'D:\Gustavo\Pessoal\Mestrado\FEI\Tese\rep\latex\image\';
 
-I = imread(strcat(path,filename));
+I = rgb2gray(imread(strcat(path,filename)));
 [PGmag, PGdir] = imgradient(I, 'prewitt');
 [PGx, PGy] = imgradientxy(I, 'prewitt');
 

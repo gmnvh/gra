@@ -42,7 +42,7 @@ int options(int argc, char **argv)
 	int lRsp = 0;
 	int lOpt;
 
-	while ((lOpt = getopt(argc, argv, "diwep:v:")) != -1) {
+	while ((lOpt = getopt(argc, argv, "diwep:v:a:")) != -1) {
 		switch (lOpt) {
 		case 'd':
 			/* Configure trace level for debug */
@@ -74,6 +74,11 @@ int options(int argc, char **argv)
 			/* Configure input as video */
 			gOption.input = INPUT_VIDEO;
 			gOption.inputFile = optarg;
+			lRsp = 0;
+			break;
+		case 'a':
+			/* Configure application */
+			gOption.app = *optarg;
 			lRsp = 0;
 			break;
 		case '?':
@@ -1263,6 +1268,40 @@ void webcam(void)
 void globalThresholdTest(void);
 void contoursTest(void);
 
+void video2image(void)
+{
+	char c;
+	Mat actual;
+	unsigned char fileCounter = 0;
+	CvCapture *capture = cvCreateFileCapture(gOption.inputFile);
+
+	namedWindow("Original", CV_WINDOW_AUTOSIZE);
+
+	/* Get the first frame */
+	while(1) {
+		actual = cvQueryFrame(capture);
+		if (actual.data == NULL) {
+			TRACE_ERROR("Frame error");
+			break;
+		}
+
+		imshow("Original", actual);
+		c = cvWaitKey(0);
+
+		if (c == 27) break;
+
+		if (c == 's') {
+			char file[10];
+			sprintf(file, "%02u.jpg", fileCounter++);
+			bool rsp = imwrite(file, actual);
+			TRACE_INFO("File %s write: %u", file, (unsigned)rsp);
+		}
+	}
+
+	cvReleaseCapture(&capture);
+	return;
+}
+
 int main(int argc, char **argv)
 {
 	setbuf(stdout, NULL);
@@ -1276,6 +1315,16 @@ int main(int argc, char **argv)
 	if (options(argc, argv) < 0) {
 		/* Option error */
 		return (-1);
+	}
+
+	/* Process specific applications */
+	{
+		TRACE_DEBUG("App: %c", gOption.app);
+		switch(gOption.app) {
+		case '1':
+			video2image();
+			return 0;
+		}
 	}
 
 	{

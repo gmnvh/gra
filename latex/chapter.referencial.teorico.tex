@@ -1,12 +1,31 @@
 \chapter{Referencial Teórico}
 
-\section{Histograma}
+O objetivo desse capítulo é referenciar as teorias que embasam o conteúdo desse trabalho bem como o estado da arte no uso do HOG.
 
-\section{Gradientes}
+\section{Histograma orientado a gradientes}
+
+HOG (Histogram of oriented gradients) é um descritor computado a partir dos gradientes da imagem, podemos defini-lo com sendo uma informação estatística do gradiente e intensidade de uma área. Suas principais propriedades são a robustez para pequenas variações nos locais dos contornos, direções e variações significativas na iluminação e cor. Na figura \ref{fig:hog} temos um resumo das principais etapas do cálculo feito para extrair o vetor de características.
+
+\begin{figure}[ht!]
+\centering
+\fbox{
+  \includegraphics[scale=0.5]{image/hog.jpg}}
+  \caption{Fluxo de cálculo para extrair o vetor de características}
+  \label{fig:hog}
+\end{figure}
+
+Para usar como referência, daqui pra frente vamos nos referir ao conjunto de parâmetros do HOG usado pelo Dalal \cite{dalal} para detecção de pessoas como sendo o HOG original.
+
+\subsection{Normalização Gamma/Cor}
+
+Os pixels da imagem podem ser representados de diversas maneiras como escala de cinza, RGB e LAB. Uma normalização do gamma pode ainda ser aplicado. 
+Apesar de imagens em tons de cinza apresentarem uma performance menor, essa será a opção de cor que iremos usar em nosso trabalho. O uso de câmeras infra vermelhas resulta na perda da informação de cor e portanto não teremos essa opção.
+
+\subsection{Gradientes}
 
 Um dos mais importantes processos no processamento de uma imagem é a sua segmentação. A segmentação consiste em subdividir a imagem em regiões ou objetos de interesse. O nível de segmentação depende do problema a ser resolvido e é comumente baseado em duas propriedades do valor da intensidade: descontinuidade e similaridade. A primeira consiste em particionar uma imagem baseado nas mudanças abruptas na intensidade, como por exemplo as bordas de um objeto. Já na segunda, é feito o agrupamento de uma região baseado em sua similaridade com outras partes da imagem, como cor ou nível de intensidade.
 
-Gonzales define borda como sendo um conjunto de pixeis conectados  presente na fronteira entre duas regiões. E conclui que a magnitude da primeira derivada pode ser usada para detectar da borda em um ponto da imagem.
+Gonzales (ano do livro) define borda como sendo um conjunto de pixeis conectados  presente na fronteira entre duas regiões. E conclui que a magnitude da primeira derivada pode ser usada para detectar a borda em um ponto da imagem.
 
 A derivada de primeira ordem de uma imagem digital pode ser aproximada no gradiente 2D. O gradiente de uma imagem \(f(x,y)\) no ponto \((x,y)\) e definido como um vetor
 
@@ -29,6 +48,7 @@ cuja magnitude é definida como \(\nabla f\), onde
 \begin{bmatrix}
 G_x^2 + G_y^2
 \end{bmatrix}^{1/2}
+\label{eq:mag}
 \end{equation}
 
 e a direção do vetor \(\alpha(x,y)\) sendo definida como
@@ -152,7 +172,22 @@ Nas figuras \ref{fig:gradiente_prewitt} e \ref{fig:gradiente_sobel} temos dois e
     \caption{Gradientes}\label{fig:gradientes}
 \end{figure}
 
-\section{Norma}
+No HOG original a máscara usada é uma máscara centrada 1-D [-1 0 1]. O gradiente é computado da seguinte maneira.
+
+\[G_{x}(x,y) = f(x+1, y) - f(x-1, y)\]
+\[G_{y}(x,y) = f(x, y+1) - f(x, y-1)\]
+
+\subsection{Cálculo dos histogramas}
+
+Depois dos cálculos do gradiente, a imagem é então dividida em pequenos retângulos (células). Para cada célula, um histograma é calculado. Esse histograma é a coleção dos ângulos dos vetores de gradiente de cada pixel que compõe a célula. Cada pixel apresenta um peso na construção do histograma das orientações das bordas. Esse peso pode ser em função do gradiente, do seu quadro ou da sua raiz.
+
+Os ângulos podem ser agrupados variando de 0 à 360 graus ou de 0 à 180 graus.
+
+No HOG original, as células tem tamanho 8x8, as orientações são ponderadas pela magnitude do vetor e uniformemente agrupas em 9 grupos de 0 a 180 graus.
+
+\subsection{Normalização em blocos}
+
+O tamanho do gradiente pode variar bastante por conta de variações como iluminação e contraste entre o fundo e o objeto de interesse. Portanto um importante passo para se obter um bom resultado na extração do vetor de características do objeto é a sua normalização.
 
 Norma é uma função que atribui um tamanho de valor positivo e diferente de zero para um vetor em um espaço vetorial.
 
@@ -165,14 +200,25 @@ Sendo um espaço vetorial \(V\) em um sub corpo \(F\) de números complexos, a n
 \item Se \( p(\mathbf{v}) = 0 \) então \(\mathbf{v}\) é o vetor zero.
 \end{itemize}
 
+Uma norma bastante usada é a norma euclidiana,  que diz que em um espaço euclidiano \(R^n\) a norma será:
 
-\section{Histograma orientado a gradientes}
+\[\|x\| := \sqrt{x_1^2 + ... + x_n^2}\]
 
-HOG (Histogram of oriented gradients) é um descritor computado a partir dos gradientes da imagem, podemos defini-lo com sendo uma informação estatística do gradiente e intensidade de uma área. Suas principais propriedades são a robustez para pequenas variações nos locais dos contornos, direções e variações significativas na iluminação e cor.
+Dos vários esquemas de normalização, a maioria é baseada no agrupamento de células em blocos maiores e normalizando o contraste de cada bloco separadamente. Além disso a uma sobreposição entre blocos para que as células de cada bloco possa contribuir nas componentes de normalização diversas vezes.
+No HOG original extraiu-se o HOG em blocos de tamanho 16x16 e dividiu cada bloco em 4 células. 
+
+\[
+f(C_{i},k) = \frac
+{\sum_{(x,y) \in C_i}V_k(x,y) + \varepsilon}
+{\sum_{(x,y) \in B}V_k(x,y) + \varepsilon}
+\]
+
+\(f(C_i,k)\) é a proporção do valor do gradiente acumulado do kth bin no bloco que contém a célula \(C_i\). O \(\varepsilon\) é um valor bem pequeno para eliminar os denominadores zeros.
+
+Depois cada histograma é concatenado, formando um vetor único de características.
+
 
 O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conforme tabela \ref{table:dlal_hog}.
-
-\todo {Ver \cite{ref16} para uma descrição do HOG}
 
 \begin{table}[h]
 \centering
@@ -192,47 +238,6 @@ O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conform
 \label{table:dlal_hog}
 \end{table}
 
-\subsection{Normalização Gamma/Cor}
-
-\subsection{Gradientes}
-
-O gradiente é computado da seguinte maneira.
-
-\[G_{x}(x,y) = H(x+1, y) - H(x-1, y)\]
-\[G_{y}(x,y) = H(x, y+1) - H(x, y-1)\]
-
-Aqui, \(G_{x}\) representa o gradiente horizontal e \(G_{y}\) o gradiente vertical de cada pixel na imagem (ou em um pedaço da imagem).
-
-Depois calculamos a intensidade e orientação de cada ponto da imagem.
-
-\[G(x,y) = \sqrt{G_{x}(x,y)^{2} + G_{y}(x,y)^{2}}\]
-\[\alpha (x,y) = tan^{-1} \left(\frac{G_{y}(x,y)}{G_{x}(x,y)}\right)\]
-
-\subsection{Classificação dos ângulos}
-
-Depois dos cálculos do gradiente, a imagem é então dividida em pequenos retângulos (células). Para cada célula, um histograma é calculado. Esse histograma é a coleção dos ângulos dos vetores de gradiente de cada pixel que compõe a célula. Os ângulos podem ser agrupados variando de 0 à 360 graus ou de 0 à 180 graus. O número de grupos em cada histograma é 20.
-
-\[
-V_{k}(x,y) = \left\{\begin{matrix}
-G(x,y), \alpha (x,y)  \in bin_{k}\\ 
-0, \alpha (x,y) \notin bin_{k}
-\end{matrix}\right. k \in (1,20)
-\]
-
-\subsection{Normalização em blocos}
-
-Dalal extraiu o HOG em blocos de tamanho 16x16 e dividiu cada bloco em 4 células. Para eliminar os impactos da luminosidade, foi feito uma normalização em cada bloco.
-
-\[
-f(C_{i},k) = \frac
-{\sum_{(x,y) \in C_i}V_k(x,y) + \varepsilon}
-{\sum_{(x,y) \in B}V_k(x,y) + \varepsilon}
-\]
-
-\(f(C_i,k)\) é a proporção do valor do gradiente acumulado do kth bin no bloco que contém a célula \(C_i\). O \(\varepsilon\) é um valor bem pequeno para eliminar os denominadores zeros.
-
-Depois cada histograma é concatenado, formando um vetor único de características.
-
 %Parâmetros:
 %
 %- imagens tons de cinza (talvez comparar com imagens binárias);
@@ -245,17 +250,66 @@ Depois cada histograma é concatenado, formando um vetor único de característi
 %- Numero de celulas
 %- Numero de blocos
 
+\section{Estado da arte}
 
-\chapter{XXX}
 
-\section{Construção da câmera infra vermelha}
+Um dos precursores em extração de características da mão usando histograma de orientação de gradientes (HOG) foi o laboratório da Mitsubishi que publicou um conjunto de artigos \cite{ref3}, \cite{ref4} sobre o tema. Nesses artigos foi feito o HOG da imagem como um todo, em tons de cinza, e dividindo os ângulos em 36 grupos. O método não era geral o suficiente para ser usado com um algoritmo válido para representação de uma forma genérico e por isso, o mesmo evolui para o SIRF. Acontece que a aplicação é bastante parecida com a proposta desse trabalho e por isso HOG é melhor detalhado posteriormente.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Gesture Components for Natural Interaction with In-Car devices &
+% Gesture control for use in auto-mobiles
+Em \cite{ref2} (Alemanha, 2000) e em \cite{ref1} (Alemanha, 2003)temos um cenário idêntico ao proposto, onde imagens infra vermelhas de uma câmera instalada no teto do carro são capturadas e traduzidas em gestos e poses de mão. Em \cite{ref1} o sistema proposto pelo artigo é capaz de reconhecer onze gestos e quatro poses. A imagem capturada em uma taxa de 25 fps e resolução 384x144 é primeiramente processada com uma combinação de subtração de fundo e threshold global. Em \cite{ref2} é usado apenas um threshold global. A mão é considerada o maior objeto da cena. Depois da segmentação, um filtro para retirar o braço é aplicado e finalmente são calculados os momentos da imagem, para o cálculo da área e do centro de massa, e os momentos Hu.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Histograms of Oriented Gradients for Human Detection
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Real-time Vision-based Infotainment User Determination for Driver Assistance
+Em \cite{ref5} (Estados Unidos, 2008) temos também o uso de câmera infra vermelha no teto do carro, mas com o objetivo de discriminar qual pessoa está usando o painel de controles do carro, o motorista ou o passageiro. O sistema faz uso do HOG para descrever a imagem e um classificador SVM com uma taxa de 96.8\% de acerto. O cálculo do HOG é uma versão simplificada feita por \cite{dalal}. Nesse artigo, depois de calculado o gradiente da imagem, a mesma é dividida em uma grade de células 2x2, o histograma é calculado para cada célula com 8 bins variando de 0 à 360 graus, portanto formando um vetor de 32 dimensões.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% An Effective Crossing Cyclist Detection on a Moving Vehicle 
+Em \cite{ref6} (China, 2010) o HOG é utilizado para detectar ciclistas. No método proposto não é feito overlap no cálculo dos histogramas, como uma maneira de melhorar o tempo de processamento, e amostragem piramidal é utilizada para extrair características globais em diferentes escalas. As imagens utilizadas são em tons de cinza e um filtro gaussiano é aplicado antes do cálculo dos HOGs (contrariando as orientações do Dalal em \cite{dalal}). O gradiente é calculado com máscara [-1 0 +1], os ângulos são calculados entre 0 e 180, e o histograma é dividido em 20 bins. A imagem é dividida em blocos de 16x16 sem divisão de células. O classificador utilizado é um SVM linear. Esse trabalho é interessante pois propõe um método para melhorar a velocidade do cálculo dos histogramas, o que pode ser útil para aplicações em tempo real embarcadas.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Hand-gesture recognition: comparative study of global, semi-local and local approaches
+Um estudo comparando descritores locais, semi locais e globais é feito em \cite{ref7} (França, 2011). O objetivo do trabalho é estudar qual seria o método mais adequado para descrever poses de mão em uma sala de cirurgia para que o médico possa enviar comandos para os aparelhos sem precisa encostar neles. Para descritores globais foi usado os momentos de Zernike (invariante em rotação, translação e escala) combinados com um classificador linear SVM. O HOG é usado como um descritor semi local e SIFT para locais. Apesar de não dar detalhes de como é feito os cálculos do HOG, o artigo mostra uma melhor performance do método.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% A vision-based system for automatic hand washing quality assessment
+Nesse artigo \cite{ref16} (Espanha, 2011), o problema a ser resolvido era verificar, com o uso de uma câmera, se uma pessoa  fez as seis diferentes poses de mão para o lavar correto das mãos. Primeiro as imagens são segmentadas por cor de pele e depois um estimador de posição do braço e da mão baseado em um filtro multi modal probabilístico é proposto. Um ROI é criado com o resultado do filtro e anterior e então HOG é aplicado, usando como classificador dois SVM independentes. Uma para o HOG normal e outro para o HOF (Histogram of optical flow).
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Automatic Ship Recognition Robust Against Aspect Angle Changes and Occlusions
+Nesse artigo \cite{ref8} (Japão, 2012), é utilizado a coHOG (co-occurence HOG) para reconhecimento de navios em imagens ISAR. No coHOG os blocos são agrupados em pares, aumentado a robustez para imagens em diferentes ângulos e na oclusão de algumas partes do navio. Por outro lado, o coHOG tem uma alta dimensão.
+
+% An Extended HOG Model: SCHOG for Human Hand Detection
+% 2012 / China
+% [1, 2] Verificar o que são essas referências
+% [7] Ler referência, o texto cita essa referência como o básico para HOG.
+% O porque usar SVM [11, 12]
+%Nesse artigo o HOG é modificado para funcionar nas cores de pele. Usou apenas o gesto de palma aberta.	
+
+% A ROBUST METHOD OF FINGERTIP DETECTION IN COMPLEX BACKGROUND
+A abordagem desse artigo \cite{ref10} (China, 2012) é selecionar, usando HOG e SVM, uma região de interesse para depois aplicar o filtro de cor de pele. O bloco tem tamanho 12x12 pixels com 2x2 células.
+
+% Deformable HOG-based Shape Descriptor
+% 2013 - Espanha	
+% [8] - Referência à HOG do artigo
+%A escrita a mão são compostas por região de pouca informação e outra com informação concentrada. A divisão feita normalmente pelo HOG é uma divisão rígida que não permite focar nas regiões de %maior interesse.
+
+\chapter{Pesquisa}
+
+\section{Especificação da base de pesquisa}
+
+Nesse capítulo tem como objetivo descrever as etapas da pesquisa prática.
+
+\subsection{Construção da câmera infra vermelha}
 
 A câmera utilizada nessa aplicação tem que ser capaz de capturar imagens nas mais diversas condições de luminosidade. Temos o caso, por exemplo, de um dia de sol cuja intensidade de luz é bem alta. Até o ponto onde não há luz nenhuma.
-Nesses casos é necessário uma iluminação própria, mas ao mesmo tempo, não pode atrapalhar o motorista. Por isso, a iluminação infra vermelha é muito utilizada. O custo é baixo e não interfere em nada no ambiente. O maio contratempo desse tipo de iluminação é que se perde toda a informação de cor.
+Nesses casos é necessário uma iluminação própria, mas ao mesmo tempo, não pode atrapalhar o motorista. Por isso, a iluminação infra vermelha é muito utilizada. O custo é baixo e não interfere em nada no ambiente. O maior contratempo desse tipo de iluminação é que se perde toda a informação de cor.
 Para gerar a base de dados para o nosso estudo, utilizamos uma câmera normal de mercado, modificada para receber a luz infra vermelha e colocamos LEDs de infra vermelho para fazer a iluminação.
-
-\todo{Colocar a referencia}
-\todo{Adicionar o espectro do sol}
 
 \begin{figure}[ht!]
 \centering
@@ -279,3 +333,153 @@ A principal modificação a ser feita nesse tipo de câmera é retirar o filtro 
   \label{fig:camera_02}
 \end{figure}
 
+\subsection{Elaboração da base de dados}
+
+As bases de dados que serão usadas no trabalho precisam refletir as condições que encontramos em um ambiente automotivo. Por isso elaboramos um conjunto de banco de imagens que variam o fundo, o usuário, a iluminação e a vestimenta.
+
+O nosso fundo vai variar conforme o carro aonde as imagens foram coletadas. Como referência, temos também um conjunto de imagens com o fundo preto homogêneo.
+O usuário será também modificado, variando sexo e cor de pele. A iluminação terá a captura diurna e noturna e a vestimenta varia por exemplo se o usuário esta usando blusa, relógio, etc.
+
+Para o usuário temos a tabela \ref{table:usuarios} mostrando as principais características dos mesmos.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline Usuário & Sexo & Cor de pele \\
+		\hline 1 & Masculino & Branco \\
+		\hline 2 & Masculino & Branco \\
+		\hline 3 & Feminino & Branco \\
+		\hline 4 & Masculino & Moreno \\
+		\hline 5 & Feminino & Negra \\
+		\hline
+	\end{tabular}
+	\caption{Lista de usuários}
+	\label{table:usuarios}
+\end{table}
+
+A nossa base de referência será uma banco de imagens com o fundo preto homogêneo, o usuário 1 do sexo masculino sem nenhum tipo de vestimenta ou acessório e a iluminação apenas dos LEDs infra vermelho, ou seja, em um ambiente totalmente escuro. Na tabela \ref{table:data_base_1} temos um resumo da parametrização dessa base e alguns exemplos das imagens.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline Usuário 		& Usuário 1 				\\ 
+		\hline Fundo 		& Preto homogêneo 			\\ 
+		\hline Iluminação 	& Infra vermelha			\\
+		\hline Vestimenta 	& Nenhuma 					\\
+		\hline 
+	\end{tabular} 
+
+	\begin{tabular}{|c|c|c|}
+		\hline 
+			\multicolumn{3}{|c|}{Gestos} \\ 
+		\hline
+			\includegraphics[scale=0.3]{image/ir_led_1/0_02.jpg} & 
+			\includegraphics[scale=0.3]{image/ir_led_1/1_02.jpg} & 
+			\includegraphics[scale=0.3]{image/ir_led_1/7_02.jpg} \\ 
+		\hline 
+	\end{tabular}
+
+	\caption{Parâmetros da base dados de referência}
+	\label{table:data_base_1}
+\end{table}
+
+% ***********************************************
+
+Na tabela \ref{table:data_base_2} temos um conjunto de imagens com o fundo do carro Ford Focus, iluminação com LEDs infra vermelhos e usuário 1 com uma blusa preta.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline Usuário 		& Usuário 1 				\\ 
+		\hline Fundo 		& Ford Focus	 			\\ 
+		\hline Iluminação 	& Infra vermelha			\\
+		\hline Vestimenta 	& Blusa preta				\\
+		\hline 
+	\end{tabular} 
+
+	\begin{tabular}{|c|c|c|}
+		\hline 
+			\multicolumn{3}{|c|}{Gestos} \\ 
+		\hline
+			\includegraphics[scale=0.3]{image/night/focus/gustavo/blackshirt/0_02.jpg} & 
+			\includegraphics[scale=0.3]{image/night/focus/gustavo/blackshirt/1_01.jpg} & 
+			\includegraphics[scale=0.3]{image/night/focus/gustavo/blackshirt/7_01.jpg} \\ 
+		\hline 
+	\end{tabular}
+
+	\caption{Parametrização do conjunto 2}
+	\label{table:data_base_2}
+\end{table}
+
+% ***********************************************
+
+Na tabela \ref{table:data_base_3} temos um conjunto de imagens com o fundo do carro Ford Focus, iluminação com LEDs infra vermelhos e usuário 1 sem vestimentas.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline Usuário 		& Usuário 1 				\\ 
+		\hline Fundo 		& Ford Focus	 			\\ 
+		\hline Iluminação 	& Infra vermelha			\\
+		\hline Vestimenta 	& Nenhuma					\\
+		\hline 
+	\end{tabular} 
+
+	\begin{tabular}{|c|c|c|}
+		\hline 
+			\multicolumn{3}{|c|}{Gestos} \\ 
+		\hline
+			\includegraphics[scale=0.3]{image/night/focus/gustavo/shortshirt/0_02.jpg} & 
+			\includegraphics[scale=0.3]{image/night/focus/gustavo/shortshirt/1_01.jpg} & 
+			\includegraphics[scale=0.3]{image/night/focus/gustavo/shortshirt/7_01.jpg} \\ 
+		\hline 
+	\end{tabular}
+
+	\caption{Parametrização do conjunto 3}
+	\label{table:data_base_3}
+\end{table}
+
+% ***********************************************
+
+Na tabela \ref{table:data_base_4} temos um conjunto de imagens com o fundo do carro Passat, iluminação com LEDs infra vermelhos e usuário 2 usando uma blusa verde. O interessante desse conjunto é a existência de um LED no painel que pode atrapalhar a segmentação da imagem.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline Usuário 		& Usuário 2 			\\ 
+		\hline Fundo 		& Passat	 			\\ 
+		\hline Iluminação 	& Infra vermelha		\\
+		\hline Vestimenta 	& Blusa verde			\\
+		\hline 
+	\end{tabular} 
+
+	\begin{tabular}{|c|c|c|}
+		\hline 
+			\multicolumn{3}{|c|}{Gestos} \\ 
+		\hline
+			\includegraphics[scale=0.3]{image/night/passat/rogerio/blusaverde/0_02.jpg} & 
+			\includegraphics[scale=0.3]{image/night/passat/rogerio/blusaverde/1_01.jpg} & 
+			\includegraphics[scale=0.3]{image/night/passat/rogerio/blusaverde/7_01.jpg} \\ 
+		\hline 
+	\end{tabular}
+
+	\caption{Parametrização do conjunto 4}
+	\label{table:data_base_4}
+\end{table}
+
+\section{Desenvolvimento da Pesquisa}
+\subsection{Implementação do HOG}
+
+Em construção.
+
+\subsection{Resultados}
+
+Em construção.
+
+\chapter{Discussão}
+
+O objetivo desse capítulo é discutir a relação entre a hipótese formulada no trabalho, a teoria existente sobre o assunto e a prática demonstrada no capítulo anterior.
+
+\chapter{Conclusão}
+
+Em construção.

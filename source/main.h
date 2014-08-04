@@ -33,6 +33,7 @@ typedef struct mainOptionStruct {
 	traceLevel trace;				/* Trace level */
 	mainTInput input;				/* Input */
 	char *inputFile;				/* Input files */
+	char app;						/* Select with application to run */
 } mainTOption;
 #define mainTOptionInit() {TRACE_LV_DEBUG, INPUT_WEBCAM, NULL}
 
