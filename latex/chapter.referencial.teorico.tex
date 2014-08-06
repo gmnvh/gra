@@ -119,7 +119,8 @@ R = w_1 z_1 + w_2 z_2 + w_3 z_3 + ... +w_9 z_9 = \sum_{i=1}^{9}{w_iz_i}
 		\caption{Máscara Sobel}
 		\label{fig:gradiente_sobel}
 	\end{center}
-	\end{subfigure}
+	\end{subfigure}]
+	\caption{Exemplo de máscara de gradientes}
 \end{figure}
 
 Nas figuras \ref{fig:gradiente_prewitt} e \ref{fig:gradiente_sobel} temos dois exemplo das máscaras mais utilizadas para cálculo de gradiente. Na figura \ref{fig:gradientes} podem ver o resultado das máscaras em uma imagem de uma pose de mão aberta feita por uma câmera infra vermelha.
@@ -220,7 +221,7 @@ Depois cada histograma é concatenado, formando um vetor único de característi
 
 O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conforme tabela \ref{table:dlal_hog}.
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{|c|c|}
 \hline Cor & RGB sem correção de gamma \\ 
@@ -238,22 +239,10 @@ O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conform
 \label{table:dlal_hog}
 \end{table}
 
-%Parâmetros:
-%
-%- imagens tons de cinza (talvez comparar com imagens binárias);
-%- filtros: sem filtro / gaussiano;
-%- Máscara para cálculo do gradiente: [-1 0 +1]
-%- Angulos: 0-180 ou 0-360
-%- Numero de bins
-%- Voted bin
-%- Normalização em blocos
-%- Numero de celulas
-%- Numero de blocos
-
 \section{Estado da arte}
 
 
-Um dos precursores em extração de características da mão usando histograma de orientação de gradientes (HOG) foi o laboratório da Mitsubishi que publicou um conjunto de artigos \cite{ref3}, \cite{ref4} sobre o tema. Nesses artigos foi feito o HOG da imagem como um todo, em tons de cinza, e dividindo os ângulos em 36 grupos. O método não era geral o suficiente para ser usado com um algoritmo válido para representação de uma forma genérico e por isso, o mesmo evolui para o SIRF. Acontece que a aplicação é bastante parecida com a proposta desse trabalho e por isso HOG é melhor detalhado posteriormente.
+Um dos precursores em extração de características da mão usando histograma de orientação de gradientes (HOG) foi o laboratório da Mitsubishi que publicou um conjunto de artigos \cite{ref3}, \cite{ref4} sobre o tema. Nesses artigos foi feito o HOG da imagem como um todo, em tons de cinza, e dividindo os ângulos em 36 grupos. O método não era geral o suficiente para ser usado com um algoritmo válido para representação de uma forma genérico e por isso, o mesmo evolui para o SIRF. 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Gesture Components for Natural Interaction with In-Car devices &
@@ -335,7 +324,7 @@ A principal modificação a ser feita nesse tipo de câmera é retirar o filtro 
 
 \subsection{Elaboração da base de dados}
 
-As bases de dados que serão usadas no trabalho precisam refletir as condições que encontramos em um ambiente automotivo. Por isso elaboramos um conjunto de banco de imagens que variam o fundo, o usuário, a iluminação e a vestimenta.
+As bases de dados que serão usadas no trabalho precisam refletir as condições que encontramos em um ambiente automotivo. Por isso elaboramos um conjunto de banco de imagens que variam o fundo, o usuário, a iluminação e a vestimenta. A resolução das imagens será 320x240 e a janela terá o tamanho de 120x110 pixels.
 
 O nosso fundo vai variar conforme o carro aonde as imagens foram coletadas. Como referência, temos também um conjunto de imagens com o fundo preto homogêneo.
 O usuário será também modificado, variando sexo e cor de pele. A iluminação terá a captura diurna e noturna e a vestimenta varia por exemplo se o usuário esta usando blusa, relógio, etc.
@@ -359,7 +348,7 @@ Para o usuário temos a tabela \ref{table:usuarios} mostrando as principais cara
 
 A nossa base de referência será uma banco de imagens com o fundo preto homogêneo, o usuário 1 do sexo masculino sem nenhum tipo de vestimenta ou acessório e a iluminação apenas dos LEDs infra vermelho, ou seja, em um ambiente totalmente escuro. Na tabela \ref{table:data_base_1} temos um resumo da parametrização dessa base e alguns exemplos das imagens.
 
-\begin{table}[h]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|}
 		\hline Usuário 		& Usuário 1 				\\ 
@@ -379,7 +368,7 @@ A nossa base de referência será uma banco de imagens com o fundo preto homogê
 		\hline 
 	\end{tabular}
 
-	\caption{Parâmetros da base dados de referência}
+	\caption{Parametrização do conjunto 1 - base de referência}
 	\label{table:data_base_1}
 \end{table}
 
@@ -387,7 +376,7 @@ A nossa base de referência será uma banco de imagens com o fundo preto homogê
 
 Na tabela \ref{table:data_base_2} temos um conjunto de imagens com o fundo do carro Ford Focus, iluminação com LEDs infra vermelhos e usuário 1 com uma blusa preta.
 
-\begin{table}[h]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|}
 		\hline Usuário 		& Usuário 1 				\\ 
@@ -415,7 +404,7 @@ Na tabela \ref{table:data_base_2} temos um conjunto de imagens com o fundo do ca
 
 Na tabela \ref{table:data_base_3} temos um conjunto de imagens com o fundo do carro Ford Focus, iluminação com LEDs infra vermelhos e usuário 1 sem vestimentas.
 
-\begin{table}[h]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|}
 		\hline Usuário 		& Usuário 1 				\\ 
@@ -443,7 +432,7 @@ Na tabela \ref{table:data_base_3} temos um conjunto de imagens com o fundo do ca
 
 Na tabela \ref{table:data_base_4} temos um conjunto de imagens com o fundo do carro Passat, iluminação com LEDs infra vermelhos e usuário 2 usando uma blusa verde. O interessante desse conjunto é a existência de um LED no painel que pode atrapalhar a segmentação da imagem.
 
-\begin{table}[h]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|}
 		\hline Usuário 		& Usuário 2 			\\ 
@@ -468,6 +457,18 @@ Na tabela \ref{table:data_base_4} temos um conjunto de imagens com o fundo do ca
 \end{table}
 
 \section{Desenvolvimento da Pesquisa}
+
+Como vimos anteriormente na tabela \ref{table:dlal_hog}, o HOG é calculado usando células de 8x8 pixeis, agrupas em blocos de 2x2 células. Portanto se aplicarmos o HOG com os parâmetros originais em uma imagem de 320x240, teremos um vetor de 40.716 dimensões. Na figura \ref{fig:hog_example1} temos um exemplo visual do HOG. Cada histograma de cada célula é mostrado usando um diagrama de rosa. O tamanho de cada pétala do diagrama é ajustado para indicar a contribuição que aquela orientação representa no histograma da célula. 
+
+\begin{figure}[ht!]
+\centering
+\fbox{
+  \includegraphics[scale=0.7]{image/hog/0_01.png}
+  \includegraphics[scale=0.7]{image/hog/7_01.png}}
+  \caption{Exemplos do cálculo do HOG com os parâmetros originais}
+  \label{fig:hog_example1}
+\end{figure}
+
 \subsection{Implementação do HOG}
 
 Em construção.
