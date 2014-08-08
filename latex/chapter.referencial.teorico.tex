@@ -1,4 +1,4 @@
-\chapter{Referencial Teórico}
+ \chapter{Referencial Teórico}
 
 O objetivo desse capítulo é referenciar as teorias que embasam o conteúdo desse trabalho bem como o estado da arte no uso do HOG.
 
@@ -241,7 +241,6 @@ O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conform
 
 \section{Estado da arte}
 
-
 Um dos precursores em extração de características da mão usando histograma de orientação de gradientes foi o laboratório da Mitsubishi que publicou um conjunto de artigos \cite{ref3}, \cite{ref4} em 1995 e 1996 sobre o tema. Nesses artigos foi feito o histograma da orientação dos gradientes da imagem como um todo, sem divisão em células e sem a ponderação com a magnitude, em tons de cinza, dividindo os ângulos em 36 grupos. O objetivo era identificar poses e gestos para interfaciar com um jogo de computador. 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -412,7 +411,7 @@ Na tabela \ref{table:data_base_4} temos um conjunto de imagens com o fundo do ca
 
 \section{Desenvolvimento da Pesquisa}
 
-Como vimos anteriormente na tabela \ref{table:dlal_hog}, o HOG é calculado usando células de 8x8 pixeis, agrupas em blocos de 2x2 células. Portanto se aplicarmos o HOG com os parâmetros originais em uma imagem de 320x240, teremos um vetor de 40.716 dimensões. Na figura \ref{fig:hog_example1} temos um exemplo visual do HOG. Cada histograma de cada célula é mostrado usando um diagrama de rosa. O tamanho de cada pétala do diagrama é ajustado para indicar a contribuição que aquela orientação representa no histograma da célula. 
+Como vimos anteriormente na tabela \ref{table:dlal_hog}, o HOG é calculado usando células de 8x8 pixeis, agrupas em blocos de 2x2 células. Portanto se aplicarmos o HOG com os parâmetros originais em uma imagem de 320x240, teremos 40x30 células. Cada célula contribui duas vezes para a formação do vetor de características por conta na sobreposição que existe na normalização em blocos, com exceção das bordas, que contribuem apenas uma vez. Portando teremos 40 + (40-2) x 30 + (30-2) células. Cada histograma tem 9 grupos de ângulos totalizando um vetor de 40.716 dimensões. Na figura \ref{fig:hog_example1} temos um exemplo visual do HOG. Cada histograma de cada célula é mostrado usando um diagrama de rosa. O tamanho de cada pétala do diagrama é ajustado para indicar a contribuição que aquela orientação representa no histograma da célula. 
 
 \begin{figure}[ht!]
 \centering
