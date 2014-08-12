@@ -205,19 +205,14 @@ Uma norma bastante usada é a norma euclidiana,  que diz que em um espaço eucli
 
 \[\|x\| := \sqrt{x_1^2 + ... + x_n^2}\]
 
-Dos vários esquemas de normalização, a maioria é baseada no agrupamento de células em blocos maiores e normalizando o contraste de cada bloco separadamente. Além disso a uma sobreposição entre blocos para que as células de cada bloco possa contribuir nas componentes de normalização diversas vezes.
-No HOG original extraiu-se o HOG em blocos de tamanho 16x16 e dividiu cada bloco em 4 células. 
+Dos vários esquemas de normalização, a maioria é baseada no agrupamento de células em blocos maiores e normalizando o contraste de cada bloco separadamente. Além disso a uma sobreposição entre blocos para que as células de cada bloco possa contribuir nas componentes de normalização diversas vezes. Quatro esquemas foram testados por Dalal, sendo \(v\) um vetor não normalizado, \(||v||_k\) sua \(k-norm\) para \(k=1,2\) e \(\epsilon\) uma constante pequena temos:
 
-\[
-f(C_{i},k) = \frac
-{\sum_{(x,y) \in C_i}V_k(x,y) + \varepsilon}
-{\sum_{(x,y) \in B}V_k(x,y) + \varepsilon}
-\]
-
-\(f(C_i,k)\) é a proporção do valor do gradiente acumulado do kth bin no bloco que contém a célula \(C_i\). O \(\varepsilon\) é um valor bem pequeno para eliminar os denominadores zeros.
-
-Depois cada histograma é concatenado, formando um vetor único de características.
-
+\begin{itemize}
+\item L2-norm, \(v \to \frac{v}{\sqrt{||v||_2^2 + \epsilon^2}}\);
+\item L2-Hys, L2-norm seguido por uma limitação nos valores máximos de \(v\) em 0.2 e renormalizando; 
+\item L1-norm, \(v \to \frac{v}{||v||_1 + \epsilon}\);
+\item L1-sqrt, \(v \to \sqrt{\frac{v}{\sqrt{||v||_2^2 + \epsilon^2}}}\).
+\end{itemize}
 
 O HOG proposto por Dalal \cite{dalal} possui a seguinte parametrização conforme tabela \ref{table:dlal_hog}.
 
@@ -428,25 +423,39 @@ Em construção.
 
 \subsection{Resultados}
 
-Quanto de treinamento é necessario ?
+Para quantificar a performance dos classificadores que serão criados, optou-se pela geração de um gráfico do tipo DET (Detection Error Tradeoff). Esse tipo de gráfico é usado em classificações binárias medindo falso negativo vs. falso positivo em uma escala log-log. As curvas de gráficos do tipo DET tendem a ser mais lineares do que as curvas ROC (Receiver Operating Characteristics), facilitando a análise para pequenas variações. Os eixos serão: Taxa de Erro (\(FalsoNeg/VerdadeiroPos + FalsoNeg\)) versus Falso Positivo por Janela (FPPW do inglês False Positive per Window).
 
-È preciso de amostras de fundo dos carros para o treinamento dos negativos ? Melhor de dia ou de noite ?
+Primeiramente será criado um conjunto de classificadores para cada pose de mão que a pesquisa abrange. Esse conjunto é formado por 3 classificadores com foco na variação da luminosidade. Um para as imagens feitas durante o dia, um outro para as imagens infra vermelhas feitas à noite e um terceiro que seria genérico tanto para dia quanto para noite. O intuito é testar se a performance de um classificador específico para a luminosidade é melhor do que um classificador que abrange os dois tipos.
 
-Dá para usar o mesmo SVM para a base de dia e de noite ?
+As imagens de treinamento serão geradas manualmente extraindo uma janela (110x120) com a pose de mão correspondente da base de referência. 
 
-Qual pose teve menos falsos positivos ?
+Cada classificador será avaliado considerando imagens da pose versus imagens sem a pose e depois imagens da pose versus imagens de outras poses. Esse teste permite avaliar quais as poses são mais parecidas.
 
-Qual a quantidade mínima de células eu posso reduzir ?
+Considerando que temos 10 poses diferentes, teremos um total de 30 classificadores.
+ 
+Depois um novo conjunto de classificadores será gerado (um para cada tipo de luminosidade) mas com treinamento de todas as poses com o objetivo de detectar mão independente da pose.
 
-Quantos bins ?
+Esse conjunto de testes será repetido para cada parâmetro do cálculo do HOG conforme tabela \ref{table:hog_var}.
 
-Melhor 0 a 360 ou 0 a 180 ?
+\begin{table}[H]
+	\centering
+		\begin{tabular}{|c|c|}
+		\hline  
+			Número de células 		&  8x8 até 240x240 		\\ 
+		\hline  
+			Número de blocos  		&  2x2 e 1x1 			\\ 
+		\hline 
+			Tipo de normalização  	&  L2-norm, L2-Hys,  L1-norm , L1-sqrt 										\\ 
+		\hline 
+			Agrupamento dos ângulos	&  9 a 36				\\ 
+		\hline
+			Sinal dos ângulos		& 0-180 / 0-360			\\
+		\hline		
+		\end{tabular} 
+		\label{table:hog_var}
+\end{table}
 
-Qual a performance sem a sobreposição na normalização ?
-
-Qual a relação de tempo quando se varia a quantidade de celulas x performance ?
-
-
+O tempo de cálculo será medido para cada parâmetro avaliado, para que depois se possa analisar o quão mais rápido o algoritmo se torna conforme seu desempenho cai.
 
 \chapter{Discussão}
 
