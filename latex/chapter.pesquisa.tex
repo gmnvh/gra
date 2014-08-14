@@ -121,13 +121,14 @@ Na tabela \ref{table:data_base_4} temos um conjunto de imagens com o fundo do ca
 
 Como vimos anteriormente na tabela \ref{table:dlal_hog}, o HOG é calculado usando células de 8x8 pixeis, agrupas em blocos de 2x2 células. Portanto se aplicarmos o HOG com os parâmetros originais em uma imagem de 320x240, teremos 40x30 células. Cada célula contribui duas vezes para a formação do vetor de características por conta na sobreposição que existe na normalização em blocos, com exceção das bordas, que contribuem apenas uma vez. Portando teremos 40 + (40-2) x 30 + (30-2) células. Cada histograma tem 9 grupos de ângulos totalizando um vetor de 40.716 dimensões. Na figura \ref{fig:hog_example1} temos um exemplo visual do HOG. Cada histograma de cada célula é mostrado usando um diagrama de rosa. O tamanho de cada pétala do diagrama é ajustado para indicar a contribuição que aquela orientação representa no histograma da célula. 
 
-\begin{figure}[ht!]
-\centering
-\fbox{
-  \includegraphics[scale=0.7]{image/hog/0_01.png}
-  \includegraphics[scale=0.7]{image/hog/7_01.png}}
-  \caption{Exemplos do cálculo do HOG com os parâmetros originais}
-  \label{fig:hog_example1}
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{p{0.5\textwidth} p{0.5\textwidth}}
+		\vspace{1pt} \includegraphics[width=0.6\textwidth]{image/hog/0_01.png} &
+		\vspace{0pt} \includegraphics[width=0.6\textwidth]{image/hog/7_01.png}
+	\end{tabular}	
+  	\caption{Exemplos do cálculo do HOG com os parâmetros originais}
+  	\label{fig:hog_example1}
 \end{figure}
 
 \subsection{Implementação do HOG}

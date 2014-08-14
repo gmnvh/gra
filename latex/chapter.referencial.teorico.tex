@@ -1,8 +1,9 @@
- \chapter{Referencial Teórico}
+\chapter{Referencial Teórico}
 
 O objetivo desse capítulo é referenciar as teorias que embasam o conteúdo desse trabalho bem como o estado da arte no uso do HOG.
 
 \section{Histograma orientado a gradientes}
+\label{sec:HOG}
 
 HOG (Histogram of oriented gradients) é um descritor computado a partir dos gradientes da imagem, podemos defini-lo com sendo uma informação estatística do gradiente e intensidade de uma área. Suas principais propriedades são a robustez para pequenas variações nos locais dos contornos, direções e variações significativas na iluminação e cor. Na figura \ref{fig:hog} temos um resumo das principais etapas do cálculo feito para extrair o vetor de características.
 
@@ -249,7 +250,7 @@ Foi na elaboração do SIFT em \cite{lowe2004distinctive}, que o uso da técnica
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Histograms of Oriented Gradients for Human Detection
-Em \cite{dalal2005histograms} ...
+Em \cite{dalal2005histograms} uma combinação com os histogramas de orientações de gradientes já existentes com a metodologia de normalização em blocos similar ao \cite{lowe2004distinctive} foi proposto como descritor para seres humanos. O alto desempenho do método fez com que a metodologia aplicada no trabalho se tornasse referência para quando se fala em HOG.  Esse artigo é a base desse trabalho e cada etapa e parâmetros do algoritmo é discutido em \ref{sec:HOG}. Além de calibrar os parâmetros para obter uma melhor performance na detecção de pessoas, os autores ainda comparam com outros três métodos existentes de descritores (Haar wavelets, PCA-SIFT e shape context) mostrando a boa performance do método.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % An Effective Crossing Cyclist Detection on a Moving Vehicle 
@@ -292,6 +293,6 @@ Em \cite{zobl2004gesture} e em \cite{akyol2000gesture} temos um cenário automot
 % Real-time Vision-based Infotainment User Determination for Driver Assistance
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Hand Gesture to Control Infotainment Equipment in Cars
-Em \cite{cheng2008real} e em \cite{parada2014hand} temos também o uso de câmeras infra vermelha no teto do carro. O primeiro tem com o objetivo de discriminar quem está usando o painel de controles do carro, o motorista ou o passageiro, e assim adaptar os controles para aumentar a segurança. O motorista quando usa o sistema de multimédia, tem a opção de controles reduzida para evitar distrações. Nesse estudo a posição do ROI é fixo e dividido em uma grade de células 2x2, o histograma é calculado para cada célula com 8 bins variando de 0 à 360 graus, portanto formando um vetor de 32 dimensões. O tamanho do ROI também é analisando variando entre 140x80, 80x80 e 140x140. O sistema faz uso de um classificador SVM e possui uma taxa de 96.8\% de acerto. Esse trabalho mostra uma alta taxa de acerto usando um vetor de características de apenas 32 dimensões, mostrando um bom potencial para aplicações de tempo real.
+Em \cite{cheng2008real} e em \cite{parada2014hand} temos também o uso de câmeras infra vermelha no teto do carro. O primeiro tem com o objetivo de discriminar quem está usando o painel de controles do carro, o motorista ou o passageiro, e assim adaptar os controles para aumentar a segurança. O motorista quando usa o sistema de multimédia, tem a opção de controles reduzida para evitar distrações. Nesse estudo a posição do ROI é fixo e dividido em uma grade de células 2x2, o histograma é calculado para cada célula com 8 grupos de ângulos variando de 0 à 360 graus, portanto formando um vetor de 32 dimensões. O tamanho do ROI também é analisado variando entre 140x80, 80x80 e 140x140. O sistema faz uso de um classificador SVM e possui uma taxa de 96.8\% de acerto. Esse trabalho mostra uma alta taxa de acerto usando um vetor de características de apenas 32 dimensões, mostrando um bom potencial para aplicações de tempo real.
 
 Já o segundo tem a proposta de identificar poses e gestos para comandar o sistema multimédia do veículo. Para isso é feito uma combinação de remoção de fundo para segmentação e geometria computacional para classificação da pose. A segmentação é o resultado de três algoritmos rodando em paralelo, o Edge-based Foreground-Background Model (EBM), Mixture of Gaussians background Model (BG\_MoG) e Maximally Stable Extremal Regions segmenter (MSER). Essa estratégia resulta em um modelo para remoção de fundo estático e dinâmico, permitindo uma pre calibração do fundo com imagens estáticas e também se adaptando a eventuais mudanças por conta de novos objetos, sombras e diferentes condições de luminosidade.
