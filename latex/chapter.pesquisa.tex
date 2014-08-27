@@ -4,7 +4,7 @@ Esse capítulo tem como objetivo descrever as etapas da pesquisa prática. Confo
 
 \begin{figure}[ht!]
 	\centering
-  	\includegraphics[scale=0.6]{image/HOG.png}
+  	\includegraphics[scale=0.3]{image/HOG.png}
   	\caption{Fluxo de trabalho da pesquisa}
   	\label{fig:research_steps}
 \end{figure}
@@ -84,9 +84,9 @@ A base de referência será um banco de imagens com o fundo preto homogêneo, o 
 		\hline 
 			\multicolumn{3}{|c|}{Gestos} \\ 
 		\hline
-			\raisebox{-.5\height}{\includegraphics[scale=0.3]{#5}} & 
-			\raisebox{-.5\height}{\includegraphics[scale=0.3]{#6}} & 
-			\raisebox{-.5\height}{\includegraphics[scale=0.3]{#7}} \\ 
+			\raisebox{-.5\height}{\includegraphics[scale=0.25]{#5}} & 
+			\raisebox{-.5\height}{\includegraphics[scale=0.25]{#6}} & 
+			\raisebox{-.5\height}{\includegraphics[scale=0.25]{#7}} \\ 
 		\hline 
 	\end{tabular}
 	\\
@@ -97,7 +97,7 @@ A base de referência será um banco de imagens com o fundo preto homogêneo, o 
 \end{table}
 }
 
-\adddb{Usuário 1}{Preto homogêneo}{Infra vermelha}{Nenhuma}{image/ir_led_2/0_02.jpg}{image/ir_led_2/1_02.jpg}{image/ir_led_2/7_02.jpg}{Parametrização da base de referência}{table:data_base_1}
+\adddb{Usuário 1}{Preto homogêneo}{Infra vermelha}{Nenhuma}{image/ir_led_2/0_02.jpg}{image/ir_led_2/1_02.jpg}{image/ir_led_2/7_02.jpg}{Parametrização da base de referência (conjunto 1)}{table:data_base_1}
 
 % ***********************************************
 
@@ -131,7 +131,7 @@ Como visto anteriormente, na tabela \ref{table:dlal_hog}, o HOG é calculado usa
   	\label{fig:hog_example1}
 \end{figure}
 
-Cada imagem de cada pose existente na base de dados foi retirada manualmente de um vídeo com o objetivo de capturar exemplares de cada pose de mão. Os arquivos criados seguiram uma metodologia de nomeação conforme o padrão \([pose]\_[número].jpg\). No qual \([pose]\) é o número da pose de mão conforme a tabela \ref{table:poses_mao} e \([número]\) é uma enumeração sequencial da pose para diferenciação das demais semelhantes.
+O banco de imagens possui exemplares de 12 poses diferentes. Cada imagem existente foi retirada manualmente de um vídeo, capturando diversos exemplares de cada pose de mão. Os arquivos criados seguiram uma metodologia de nomeação conforme o padrão \([pose]\_[número].jpg\). No qual \([pose]\) é o número da pose de mão conforme a tabela \ref{table:poses_mao} e \([número]\) é uma enumeração sequencial da pose para diferenciação das demais semelhantes.
 
 \newcommand{\addpose}[2] {
 	\arabic{table:counter_poses_mao} \stepcounter{table:counter_poses_mao} & 
@@ -164,7 +164,7 @@ Cada imagem de cada pose existente na base de dados foi retirada manualmente de 
 	\label{table:poses_mao}
 \end{table}
 
-Primeiramente, será criado um conjunto de classificadores para cada pose de mão que a pesquisa abrange. Esse conjunto é formado por 3 classificadores com foco na variação da luminosidade. Um para as imagens feitas durante o dia, um outro para as imagens infra vermelhas feitas à noite e um terceiro que seria genérico tanto para dia quanto para noite. O intuito é testar se a performance de um classificador específico para a luminosidade é melhor do que um classificador que abrange os dois tipos.
+Primeiramente, será criado um conjunto de classificadores SVM (Support Vector Machine) para cada pose de mão que a pesquisa abrange. Esse conjunto é formado por 3 classificadores com foco na variação da luminosidade. Um para as imagens feitas durante o dia, um outro para as imagens infra vermelhas feitas à noite e um terceiro que seria genérico tanto para dia quanto para noite. O intuito é testar se a performance de um classificador específico para a luminosidade é melhor do que um classificador que abrange os dois tipos.
 
 As imagens de treinamento serão geradas manualmente extraindo uma janela (110x120) com a pose de mão correspondente da base de referência. 
 
@@ -209,7 +209,7 @@ Para quantificar a performance dos classificadores que serão criados, optou-se 
 
 \chapter{Discussão}
 
-O objetivo desse capítulo é discutir a relação entre a hipótese formulada no trabalho, a teoria existente sobre o assunto e a prática demonstrada no capítulo anterior com o objetivo de contribuir com o estudo do \citeonline{dalal2006finding} com os parâmetros de poses de mão em um ambiente automotivo. A tabela \ref{table:key_hog} mostra a parametrização feita por \citeonline{dalal2006finding} para diversas classes de objetos.
+O objetivo desse capítulo é discutir a relação entre a hipótese formulada no trabalho, a teoria existente sobre o assunto e a prática demonstrada no capítulo anterior, contribuindo com o estudo do \citeonline{dalal2006finding} parametrizando as poses de mão em um ambiente automotivo. A tabela \ref{table:key_hog} mostra a parametrização feita por \citeonline{dalal2006finding} para diversas classes de objetos.
 Como as poses propostas por esse trabalho possuem formatos bastante distintos é possível que se chegue na conclusão que cada pose possua sua própria parametrização.
 
 \begin{table}[H]
@@ -239,23 +239,46 @@ Como as poses propostas por esse trabalho possuem formatos bastante distintos é
 		Cachorro & 96x56 & 9 & (0-180\degree) & \(RGB\) & L1-Sqrt \\
 	\hline		
 	\end{tabular} 
-	\caption{Parametrização  para diferentes classes de objetos feita por \cite{dalal2006finding}.}
+	\caption{Parametrização  para diferentes classes de objetos \cite{dalal2006finding}.}
 	\label{table:key_hog}
 \end{table}
 
 \chapter{Conclusão}
 
-Até onde chegou hoje ? Livre, sem referência.
+A pesquisa mostra que a interação do homem com o seu veículo através de gestos é apenas uma questão de tempo e que existe uma gama gigantesca de técnicas e algoritmos que podem ser usados para o serviço. Um deles é o Histogram of Oriented Gradients (HOG), que tem mostrado uma grande robustez contra grandes variações de luminosidade e tem sido aplicado nas mais diferentes classes de objetos. Ele é recomendado para objetos cuja forma se mantem, mesmo em ângulos diferentes, que é o caso das poses de mão. Mesmo variando a pessoa ou a vestimenta, a forma de cada pose se mantem, diferentemente de um gato, por exemplo, que pode assumir diversas formas dependendo de como ele está posicionado. O gato pode estar dormindo todo esticado, ou todo enrolado dentro de uma caixa, pode estar andando ou de barriga para cima brincando. Essas grandes variações de formas para um mesmo tipo de objetivo não é o tipo recomendado para o uso do HOG.
 
-FAZER
-- Cronograma - 
-	Implementação do algoritmo
-	base de dados
-		dia
-		outras pessoas
-	metodologia do treinamento
-	Analise dos resultados
-- Novo diagrama
-- Resumo
--Abtract
--Colocar a patente do google
+É esperado que cada dedo da mão contribua de forma bastante significativa para o histograma de orientações com graus bastante uniformes, criando uma boa distinção em relação ao fundo do veículo.
+
+A câmera infravermelha também tem mostrado uma solução eficaz de captura de imagens no escuro. Não é necessário uma grande quantidade de LEDs para poder fazer as aquisições da imagem e não se faz distinção para cor de peles diferentes ou caso se faça uso de luvas.
+
+Por fim, o trabalho se encaminha para concluir um conjunto de parâmetros para melhor se calcular o HOG, criando assim, um descritor de poses de mão para aplicações automotivas. E também, determinar as melhores poses de mão para a aplicação proposta.
+
+\chapter{Cronograma}
+
+Esse capítulo apresenta o cronograma do trabalho, descrevendo as etapas do projeto e seus progressos.
+
+Como tarefas em andamento ou planejadas para execução temos: Referência bibliográfica, que visa o acompanhamento das publicações mais atuais do tema e apoio para teorização da parte prática que será desenvolvida. Elaboração da base de dados dia, que visa a construção de uma banco de imagens que contemple as poses discutidas no trabalho no interior do veículo durante o dia, ou seja, com iluminação natural. Preparação das imagens de treinamento, que visa o trabalho manual de classificar, recortar e centralizar as poses de mão dentro da imagem original. Implementação do algoritmo, que visa desenvolver de forma parametrizável cada etapa do HOG. Aplicação do algoritmo, que visa exercitar a implementação para o banco de imagens criado. E por fim, análise dos resultados, que visa analisar e concluir os resultados dos experimentos. 
+
+\noindent\resizebox{\textwidth} {!} {
+\begin{ganttchart}[
+				       vgrid,								% Add vertical lines in the bar canvas
+				       bar/.append style={fill=blue!50},	% By default, fill bars with blue color
+				       progress=today,						% Add progress information
+				       today=3,								% Today configuration (month # * 2)
+				  ] {1}{14}
+\gantttitle{2014}{10} 						
+\gantttitle{2015}{4} 						\\
+\gantttitlelist{8,9,10,11,12,1,2}{2} 		\\
+
+% Tasks
+\ganttbar{Referência bibliográfica}{1}{12} 					\\
+\ganttbar{Preparação para qualificação}{2}{3} 				\\
+\ganttmilestone[progress=none]{Qualificação}{3} 			\ganttnewline
+\ganttbar{Elaboração da base de dados dia}{4}{6} 			\\
+\ganttbar{Preparação das imagens de treinamento}{5}{6}		\\
+\ganttbar{Implementação do algoritmo}{7}{8}					\ganttnewline
+\ganttbar{Aplicação do algoritmo}{9}{10} 					\\
+\ganttbar{Análise dos resultados}{11}{12} 					\\
+\ganttmilestone[progress=none]{Banca final}{13}				
+\end{ganttchart}
+}

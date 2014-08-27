@@ -4,6 +4,7 @@
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{gensymb}
+\usepackage{pgfgantt}
 
 \author{Gustavo Müller Nunes}
 \title{Histograma de orientação de gradientes para poses de mão em um ambiente automotivo}
@@ -30,13 +31,29 @@
 	
 %	\epigrafe{Em construção.}{.}
 	
-%	\begin{resumo}
-%		Em construção.
-%	\end{resumo}
+\begin{resumo}
+ As funções disponíveis dentro de automóveis tem aumentado nos últimos anos, mudando a maneira que se interage com o sistema automotivo. O sistema automotivo é composto por elementos focados na condução, assim como elementos de entretenimento e produtividade. Sistemas de interação como telas sensíveis ao toque, comandos de voz, conjunto de botões multifunções no volante, são comuns nos veículos atualmente. Com o número de funções aumentando e com a necessidade de manter o usuário focado na tarefa principal de conduzir o veículo, o reconhecimento de gestos poderá ser um paradigma complementar para a interação em veículos. 
+
+ O reconhecimento de poses e gestos pode ser usado como um sistema de interação entre o motorista e o carro, diminuindo sua distração na hora de comandar as diversas interfaces que existem nos automóveis. Desta forma, o foco deste trabalho é estudar um descritor de objetos baseado em gradientes que seja capaz de caracterizar poses de mão e verificar qual a melhor parametrização para um sistema automotivo onde há uma grande variação de luz. O \textit{Histogram of Oriented Gradients} (HOG) foi escolhido devido a sua grande robustez para variações de luminosidade e por apresentar uma alta taxa de reconhecimento para pedestres, carros, entre outros.
+
+O estudo contribui com a análise de 12 poses diferentes, descrevendo qual delas é melhor caracterizada pelo HOG, variando as condições de luz, o motorista e o veículo. No banco de dados criado, a luz varia com imagens de dia e com imagens noturnas iluminadas com LED infravermelhos. A iluminação não percebida pelo humano, como por exemplo, a luz infravermelho é um requisito bastante importante pois a iluminação do interior do carro, quando o mesmo se encontra no escuro, não pode atrapalhar o motorista. O motorista varia conforme sexo, cor de pele, e vestimentas (como blusas, relógios e luvas). A variação do veículo faz com que tenha-se fundos diferentes para as poses. Esses são requisitos que contextualizam o cenário de uso e influenciam esse estudo. Para execução do projeto, foi criado um banco de imagens com fundo homogêneo para usar como referência.
+
+Usando o \textit{Support Vector Machine} (SVM) como método de classificação para as imagens, o trabalho tem como proposta apresentar o desempenho do HOG variando os parâmetros de tamanho de célula, tamanho de bloco, tipo de normalização gama, tipo de normalização local entre blocos e número de agrupamentos dos ângulos dos histogramas. Com a análise dos resultados será possível, portanto, criar um descritor de poses de mão para um ambiente automotivo.
+ 		
+\end{resumo}
 	
-%	\begin{abstract}
-%		Em construção.
-%	\end{abstract}
+\begin{abstract}
+The functions available within cars has increased in recent years, changing the way the driver interacts with the automotive system. The automotive system is based on elements focus on conducting, as well as elements of entertainment and productivity. Systems of interaction as touchscreens, voice commands, a set of buttons on the multifunction steering wheel, are common in current vehicles. With the increasing number of functions and the need to keep the user focused on the primary task of driving the vehicle, the gesture recognition can be complementary interaction paradigm for vehicles. 
+This work aims to study the detection of hand poses inside a vehicle. The recognition of poses and gestures can be used as a system of interaction between the driver and the car, reducing their distraction in time to command the various interfaces that exist in cars. 
+
+The recognition of poses and gestures can be used as a system of interaction between the driver and the car, reducing their distraction in time to command the various interfaces that exist in cars. Thus, the focus is to study an object descriptor based on gradients, capable of characterizing hand poses and then verify the best parameterization for an automotive system where there is a large variation in light. The Histogram of Oriented Gradients (HOG) was chosen due to its robustness to large variations in brightness and has a high recognition rate for pedestrians, cars, among others
+
+The study contributes to the analysis of 12 different poses, describing which is best characterized by HOG, varying light conditions, the driver and the vehicle. 
+In the database created, the light varies with images at day and images at night illuminated with infrared LED. The non-visible illumination is a very important requirement for the lighting inside a car, when it is in the dark, because it can not disturb the driver. The driver varies according to gender, skin color, and clothing (like sweaters, watches and gloves). The variation of the vehicle brings different backgrounds to the poses. 
+A database of images with a black simple background was also created to be used as reference.
+
+Using the SVM (Support Vector Machine) as a method of classification for the images, the paper aims to present the performance of HOG varying the parameters of cell size, block size, type of normalization range, type of local normalization between blocks and number of bins in the histogram. Analysing the results, is possible to conclude with a descriptor of hand poses to an automotive environment.
+\end{abstract}
 	
 	\tableofcontents 	% Índice de conteúdos
 	\listoffigures 		% Lista de figuras
