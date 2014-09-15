@@ -44,28 +44,105 @@ A principal modificação a ser feita nesse tipo de câmera é retirar o filtro 
 
 \section{Elaboração da base de dados}
 
-As bases de dados que serão usadas no trabalho precisam refletir as condições que encontramos em um ambiente automotivo. Por isso elaboramos um conjunto de banco de imagens que variam o fundo, o usuário, a iluminação e a vestimenta. A resolução das imagens será 320x240 e a janela terá o tamanho de 120x110 pixeis.
+A base de dados que será utilizada no trabalho precisa refletir as condições encontradas em um ambiente automotivo. Portanto, nomeou-se três variáveis diferentes que sofrem grande alteração no interior de um veículo: a iluminação, o veículo e o usuário.
 
-O nosso fundo vai variar conforme o carro de onde as imagens foram coletadas. Como referência, temos também um conjunto de imagens com o fundo preto homogêneo.
-O usuário será também modificado, variando sexo e cor de pele. A iluminação terá a captura diurna e noturna e a vestimenta varia por exemplo se o usuário esta usando blusa, relógio, etc.
-
-Para o usuário temos a tabela \ref{table:usuarios} mostrando as suas principais características.
+No caso da iluminação, a mesma pode variar desde um luz solar intensa até a completa escuridão. Quando se tem a luz natural iluminando a cena, não é preciso a utilização da luz artificial infravermelha. Mas é possível adicionar um filtro de luz à câmera para que apenas a luz infravermelha, contida na luz natural, seja capturada pelo sensor. Por esse motivo compilou-se a tabela \ref{table:iluminacao} mostrando os três tipos de luz utilizados na captura da imagem. No primeiro, tem-se a luz natural solar formando imagens coloridas. No segundo, tem-se a luz natural solar mas com o filtro adicionado à câmera, formando imagens infravermelhas com iluminação natural. E finalmente no terceiro, tem-se um cenário de completa escuridão onde a cena é iluminada artificialmente com luzes infravermelhas da própria câmera, formando imagens infravermelhas com iluminação artificial.
 
 \begin{table}[h]
 	\centering
 	\begin{tabular}{|c|c|c|}
-		\hline Usuário & Sexo & Cor de pele \\
-		\hline 1 & Masculino & Branco \\
-		\hline 2 & Masculino & Branco \\
-		\hline 3 & Feminino & Branco \\
-		\hline 4 & Masculino & Moreno \\
-		\hline 5 & Feminino & Negra \\
+		\hline Número & Descrição	 					\\
+		\hline 1 & Iluminação natural sem filtro de luz \\
+		\hline 2 & Iluminação natural com filtro de luz \\
+		\hline 3 & Iluminação artificial infravermelha	\\
+		\hline
+	\end{tabular}
+	\caption{Lista de iluminações utilizadas na geração do banco de imagens}
+	\label{table:iluminacao}
+\end{table}
+ 
+A mudança do veículo tem um papel bastante importante na geração do banco de imagens. É variando o veículo que varia-se o fundo da imagem. E é exatamente a relação de contraste entre o fundo e mão do usuário que permitirá a segmentação da pose de mão. Para isso capturou-se as imagens em diversos veículos e optou-se também extrair as imagens em um fundo de cor preto homogêneo, para ser usado como referência. A tabela \ref{table:veiculos} mostra a relação de veículos utilizados.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline Número & Descrição	 					\\
+		\hline 1 & Fundo preto homogêneo				\\
+		\hline 2 & Veículo [Modelo - Marca - Ano]		\\
+		\hline 3 & Veículo [Modelo - Marca - Ano]		\\
+		\hline
+	\end{tabular}
+	\caption{Lista de veículos utilizados na geração do banco de imagens}
+	\label{table:veiculos}
+\end{table}
+
+O usuário, ou seja, a pessoa que está executando a pose de mão, foi contabilizado como uma variável do banco de imagens pois cada um possui uma geometria diferente para as mesmas poses de mão. Além disso, a cor de pele também varia de pessoa para pessoa e portanto amostragens com essas variâncias são bastante representativas. Na tabela \ref{table:usuarios} tem-se a listagem dos usuários utilizados.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline Usuário 	& Sexo 		& Cor de pele 	\\
+		\hline 1 		& Masculino & Branco 		\\
+		\hline 2 		& Masculino & Branco 		\\
+		\hline 3 		& Feminino 	& Branco 		\\
+		\hline 4 		& Masculino & Moreno 		\\
+		\hline 5 		& Feminino 	& Negra 		\\
 		\hline
 	\end{tabular}
 	\caption{Lista de usuários}
 	\label{table:usuarios}
 \end{table}
 
+Depois de estabelecer quais serão as variáveis do sistema, é necessário relacionar o conjunto de poses de mão que se queira estudar. Compilando as diversas poses contidas nos artigos do referencial bibliográfico e que possuem potencial para serem utilizadas no interior de veículos por não possuírem oclusão do ponto de vista do teto do veículo, chegou-se em 12 exemplares de poses listadas na tabela \ref{table:poses_mao}. Como a numeração desta tabela foi utilizada como referência para a nomeação dos arquivos, foi adicionado no final a imagem sem nenhuma pose, ou seja, apenas do fundo. Essas imagens sem a pose são importantes pois podem ser usadas posteriormente como estudo para algoritmos de remoção de fundo ou como exemplos negativos de poses para algoritmos de treinamento.
+
+\newcommand{\addpose}[2] {
+	\arabic{table:counter_poses_mao} \stepcounter{table:counter_poses_mao} & 
+	#1 & 
+	\includegraphics[width=0.1\linewidth]{#2}
+}
+
+\begin{table}[H]
+	\centering
+	
+	\begin{tabular}{|c|c|c|}
+		\hline Número 	& Descrição 	& Imagem 	
+		\newcounter{table:counter_poses_mao}
+		\stepcounter{table:counter_poses_mao}							\\ 
+		\hline \addpose{1 dedo}{image/hog/1_01.jpg}						\\
+		\hline \addpose{2 dedos}{image/hog/2_01.jpg}					\\
+		\hline \addpose{3 dedos}{image/hog/3_01.jpg}					\\
+		\hline \addpose{4 dedos}{image/hog/4_01.jpg}					\\
+		\hline \addpose{5 dedos / Mão aberta}{image/hog/0_01.jpg}		\\
+		\hline \addpose{Revólver}{image/hog/5_01.jpg}					\\
+		\hline \addpose{Palma aberta}{image/hog/6_01.jpg}				\\
+		\hline \addpose{Palma fechada}{image/hog/7_01.jpg}				\\
+		\hline \addpose{Jóia}{image/hog/8_01.jpg}						\\
+		\hline \addpose{Telefone}{image/hog/9_01.jpg}					\\
+		\hline \addpose{Chifre}{image/hog/10_01.jpg}					\\
+		\hline \addpose{Revólver com cano duplo}{image/hog/11_01.jpg}	\\
+		\hline \addpose{Sem pose}{image/hog/11_01.jpg}										\\
+		\hline 
+	\end{tabular} 
+	
+	\caption{Poses de mão utilizadas na geração do banco de imagens.}
+	\label{table:poses_mao}
+\end{table}
+
+Em termos de posicionamento, a câmera foi instalada no teto do veículo com uma distância de Xcm do braço e mão do usuário e num ângulo de Y graus.
+
+
+(Adicionar figura da geometria e distâncias entre câmera e usuário)
+
+
+Os arquivos criados seguiram uma metodologia de nomeação conforme o padrão:
+\begin{equation}
+[pose]\_[iluminação]\_[veículo]\_[usuário]\_[número].png
+\end{equation}
+No qual \([pose]\) é o número da pose de mão conforme a tabela \ref{table:poses_mao}, \([iluminação]\) é o número da iluminação utilizada conforme tabela \ref{table:iluminacao}, \([veículo]\) é o número do veículo utilizado conforme tabela \ref{table:veiculos}, \([usuário]\) é o número do usuário utilizado conforme tabela \ref{table:usuarios} e \([número]\) é uma enumeração sequencial da pose para diferenciação das demais semelhantes.
+
+A resolução das imagens é 320x240.
+
+\iffalse
 A base de referência será um banco de imagens com o fundo preto homogêneo, o usuário 1 do sexo masculino sem nenhum tipo de vestimenta ou acessório e a iluminação apenas dos LEDs infravermelhos, ou seja, em um ambiente totalmente escuro. Na tabela \ref{table:data_base_1} temos um resumo da parametrização dessa base e alguns exemplos das imagens.
 
 \newcommand{\adddb}[9]{
@@ -117,6 +194,8 @@ Na tabela \ref{table:data_base_4} tem-se um conjunto de imagens com o fundo do c
 
 \adddb{Usuário 2}{Passat}{Infra vermelha}{Blusa verde}{image/night/passat/rogerio/blusaverde/0_02.jpg}{image/night/passat/rogerio/blusaverde/1_01.jpg}{image/night/passat/rogerio/blusaverde/7_01.jpg}{Parametrização do conjunto 4}{table:data_base_4}
 
+\fi
+
 \section{Treinamento}
 
 Como visto anteriormente, na tabela \ref{table:dlal_hog}, o HOG é calculado usando células de 8x8 pixeis, agrupadas em blocos de 2x2 células. Portanto, se aplicado o HOG com os parâmetros originais em uma imagem de 320x240, tem-se 40x30 células. Cada célula contribui quatro vezes para a formação do vetor de características por conta na sobreposição que existe na normalização em blocos, com exceção das bordas, que contribuem apenas uma vez. Portanto, tem-se 40 + (40-2) x 30 + (30-2) células. Cada histograma tem 9 grupos de ângulos totalizando um vetor de 40.716 dimensões. Na figura \ref{fig:hog_example1} tem-se um exemplo visual do HOG. Cada histograma de cada célula é mostrado usando um diagrama de rosa. O tamanho de cada pétala do diagrama é ajustado para indicar a contribuição que aquela orientação representa no histograma da célula. 
@@ -131,38 +210,8 @@ Como visto anteriormente, na tabela \ref{table:dlal_hog}, o HOG é calculado usa
   	\label{fig:hog_example1}
 \end{figure}
 
-O banco de imagens possui exemplares de 12 poses diferentes. Cada imagem existente foi retirada manualmente de um vídeo, capturando diversos exemplares de cada pose de mão. Os arquivos criados seguiram uma metodologia de nomeação conforme o padrão \([pose]\_[número].jpg\). No qual \([pose]\) é o número da pose de mão conforme a tabela \ref{table:poses_mao} e \([número]\) é uma enumeração sequencial da pose para diferenciação das demais semelhantes.
 
-\newcommand{\addpose}[2] {
-	\arabic{table:counter_poses_mao} \stepcounter{table:counter_poses_mao} & 
-	#1 & 
-	\includegraphics[width=0.1\linewidth]{#2}
-}
 
-\begin{table}[H]
-	\centering
-	
-	\begin{tabular}{|c|c|c|}
-		\hline Número 	& Descrição 	& Imagem 	
-		\newcounter{table:counter_poses_mao}						\\ 
-		\hline \addpose{Mão aberta / 5 dedos}{image/hog/0_01.jpg}		\\
-		\hline \addpose{1 dedo}{image/hog/1_01.jpg}		\\
-		\hline \addpose{2 dedos}{image/hog/2_01.jpg}		\\
-		\hline \addpose{3 dedos}{image/hog/3_01.jpg}		\\
-		\hline \addpose{4 dedos}{image/hog/4_01.jpg}		\\
-		\hline \addpose{Revólver}{image/hog/5_01.jpg}		\\
-		\hline \addpose{Palma aberta}{image/hog/6_01.jpg}		\\
-		\hline \addpose{Palma fechada}{image/hog/7_01.jpg}		\\
-		\hline \addpose{OK}{image/hog/8_01.jpg}		\\
-		\hline \addpose{Telefone}{image/hog/9_01.jpg}		\\
-		\hline \addpose{Chifre}{image/hog/10_01.jpg}		\\
-		\hline \addpose{Revólver com cano duplo}{image/hog/11_01.jpg}		\\
-		\hline 
-	\end{tabular} 
-	
-	\caption{Poses de mão utilizadas}
-	\label{table:poses_mao}
-\end{table}
 
 Primeiramente, será criado um conjunto de classificadores SVM (Support Vector Machine) para cada pose de mão que a pesquisa abrange. Esse conjunto é formado por 3 classificadores com foco na variação da luminosidade. Um para as imagens feitas durante o dia, um outro para as imagens infra vermelhas feitas à noite e um terceiro que seria genérico tanto para dia quanto para noite. O intuito é testar se a performance de um classificador específico para a luminosidade é melhor do que um classificador que abrange os dois tipos.
 
